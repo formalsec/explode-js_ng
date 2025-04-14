@@ -1,0 +1,66 @@
+{
+    "advisory": {
+        "id": "GHSA-vc6q-ccj9-9r89",
+        "cwe": "CWE-22"
+    },
+    "correct_cwe": "CWE-22",
+    "correct_package_link": "https://registry.npmjs.org/maildev/-/maildev-2.1.0.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "lib/mailserver.js",
+                    "lineno": 92,
+                    "code": "function saveAttachment (id, attachment) {"
+                },
+                "sink": {
+                    "file": "lib/mailserver.js",
+                    "lineno": 97,
+                    "code": "path.join(mailServer.mailDir, id, attachment.contentId)"
+                }
+            }, 
+        ]
+    },
+    "poc": [
+        {
+            "url": "https://intrix.com.au/articles/exposing-major-security-flaw-in-maildev/"
+        },
+        {
+            "url": "https://github.com/Tim-Hoekstra/MailDev-2.1.0-Exploit-RCE"
+        }
+    ],
+    "patch": [
+        {
+            "url": "https://github.com/maildev/maildev/pull/508"
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
+}

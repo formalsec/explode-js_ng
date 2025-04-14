@@ -1,0 +1,63 @@
+{
+    "advisory": {
+        "id": "GHSA-6jrj-vc65-c983",
+        "cwe": "CWE-22"
+    },
+    "correct_cwe": "CWE-22",
+    "correct_package_link": "https://registry.npmjs.org/unzip-stream/-/unzip-stream-0.3.1.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "lib/unzip-stream.js",
+                    "lineno": 286,
+                    "code": "UnzipStream.prototype._prepareOutStream = function (vars, entry) {"
+                },
+                "sink": {
+                    "file": "lib/unzip-stream.js",
+                    "lineno": 372,
+                    "code": "this.outStreamInfo.stream.pipe(entry);"
+                }
+            }, 
+        ]
+    },
+    "poc": [
+        {
+            "url": ""
+        }
+    ],
+    "patch": [
+        {
+            "url": "https://github.com/mhr3/unzip-stream/commit/ab67989719abb4dcc774d02de266151905b8d45a"
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
+}

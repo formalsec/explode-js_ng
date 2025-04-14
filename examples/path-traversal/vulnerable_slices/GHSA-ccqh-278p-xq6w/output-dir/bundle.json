@@ -1,0 +1,10 @@
+{
+  "type": "webpack",
+  "entryId": "386",
+  "modules": [
+    {
+      "id": "./\\..\\node_modules\\debug\\src\\index",
+      "path": "././\\..\\node_modules\\debug\\src\\index.js"
+    }
+  ]
+}

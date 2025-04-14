@@ -1,0 +1,63 @@
+{
+    "advisory": {
+        "id": "GHSA-5462-4vcx-jh7j",
+        "cwe": "CWE-94"
+    },
+    "correct_cwe": "CWE-94",
+    "correct_package_link": "https://registry.npmjs.org/angular-expressions/-/angular-expressions-1.4.2.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "lib/main.js",
+                    "lineno": 46,
+                    "code": "function compile(src, options) {"
+                },
+                "sink": {
+                    "file": "lib/parse.js",
+                    "lineno": 1694,
+                    "code": "var fn = new Function("
+                }
+            }, 
+        ]
+    },
+    "poc": [
+        {
+            "url": "https://github.com/peerigon/angular-expressions/security/advisories/GHSA-5462-4vcx-jh7j"
+        }
+    ],
+    "patch": [
+        {
+            "url": "https://github.com/peerigon/angular-expressions/commit/97f7ad94006156eeb97fc942332578b6cfbf8eef"
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
+}
