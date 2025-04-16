@@ -1,7 +1,7 @@
 "use strict";
 
 
-//main.js
+/* node_module/angular-expressions/lib/main.js */
 var filters = {};
 var Lexer = parse.Lexer;
 var Parser = parse.Parser;
@@ -88,7 +88,7 @@ exports.Parser = Parser;
 exports.compile = compile;
 exports.filters = filters;
 
-//parse.js
+/* node_modules/angular-expressions/lib/parse.js */
 
 /**
  * @constructor
@@ -364,6 +364,719 @@ Lexer.prototype = {
 			this.index++;
 		}
 		this.throwError("Unterminated quote", start);
+	},
+};
+
+function ASTCompiler(astBuilder, $filter) {
+	this.astBuilder = astBuilder;
+	this.$filter = $filter;
+}
+
+ASTCompiler.prototype = {
+	compile: function (expression) {
+		var self = this;
+		var ast = this.astBuilder.ast(expression);
+		this.state = {
+			nextId: 0,
+			filters: {},
+			fn: { vars: [], body: [], own: {} },
+			assign: { vars: [], body: [], own: {} },
+			inputs: [],
+		};
+		findConstantAndWatchExpressions(ast, self.$filter);
+		var extra = "";
+		var assignable;
+		this.stage = "assign";
+		if ((assignable = assignableAST(ast))) {
+			this.state.computing = "assign";
+			var result = this.nextId();
+			this.recurse(assignable, result);
+			this.return_(result);
+			extra = "fn.assign=" + this.generateFunction("assign", "s,v,l");
+		}
+		var toWatch = getInputs(ast.body);
+		self.stage = "inputs";
+		forEach(toWatch, function (watch, key) {
+			var fnKey = "fn" + key;
+			self.state[fnKey] = { vars: [], body: [], own: {} };
+			self.state.computing = fnKey;
+			var intoId = self.nextId();
+			self.recurse(watch, intoId);
+			self.return_(intoId);
+			self.state.inputs.push(fnKey);
+			watch.watchId = key;
+		});
+		this.state.computing = "fn";
+		this.stage = "main";
+		this.recurse(ast);
+		var fnString =
+			// The build and minification steps remove the string "use strict" from the code, but this is done using a regex.
+			// This is a workaround for this until we do a better job at only removing the prefix only when we should.
+			'"' +
+			this.USE +
+			" " +
+			this.STRICT +
+			'";\n' +
+			this.filterPrefix() +
+			"var fn=" +
+			this.generateFunction("fn", "s,l,a,i") +
+			extra +
+			this.watchFns() +
+			"return fn;";
+    /* Vulnerability is manifested around here: */
+    // console.log(fnString);
+		// eslint-disable-next-line no-new-func
+		var fn = new Function(
+			"$filter",
+			"getStringValue",
+			"ifDefined",
+			"plus",
+			fnString
+		)(this.$filter, getStringValue, ifDefined, plusFn);
+
+		this.state = this.stage = undefined;
+		fn.ast = ast;
+		fn.literal = isLiteral(ast);
+		fn.constant = isConstant(ast);
+		return fn;
+	},
+
+	USE: "use",
+
+	STRICT: "strict",
+
+	watchFns: function () {
+		var result = [];
+		var fns = this.state.inputs;
+		var self = this;
+		forEach(fns, function (name) {
+			result.push("var " + name + "=" + self.generateFunction(name, "s"));
+		});
+		if (fns.length) {
+			result.push("fn.inputs=[" + fns.join(",") + "];");
+		}
+		return result.join("");
+	},
+
+	generateFunction: function (name, params) {
+		return (
+			"function(" +
+			params +
+			"){" +
+			this.varsPrefix(name) +
+			this.body(name) +
+			"};"
+		);
+	},
+
+	filterPrefix: function () {
+		var parts = [];
+		var self = this;
+		forEach(this.state.filters, function (id, filter) {
+			parts.push(id + "=$filter(" + self.escape(filter) + ")");
+		});
+		if (parts.length) {
+			return "var " + parts.join(",") + ";";
+		}
+		return "";
+	},
+
+	varsPrefix: function (section) {
+		return this.state[section].vars.length
+			? "var " + this.state[section].vars.join(",") + ";"
+			: "";
+	},
+
+	body: function (section) {
+		return this.state[section].body.join("");
+	},
+
+	recurse: function (
+		ast,
+		intoId,
+		nameId,
+		recursionFn,
+		create,
+		skipWatchIdCheck
+	) {
+		var left,
+			right,
+			self = this,
+			args,
+			expression,
+			computed;
+		recursionFn = recursionFn || noop;
+		if (!skipWatchIdCheck && isDefined(ast.watchId)) {
+			intoId = intoId || this.nextId();
+			this.if_(
+				"i",
+				this.lazyAssign(intoId, this.unsafeComputedMember("i", ast.watchId)),
+				this.lazyRecurse(ast, intoId, nameId, recursionFn, create, true)
+			);
+			return;
+		}
+
+		switch (ast.type) {
+			case AST.Program:
+				forEach(ast.body, function (expression, pos) {
+					self.recurse(
+						expression.expression,
+						undefined,
+						undefined,
+						function (expr) {
+							right = expr;
+						}
+					);
+					if (pos !== ast.body.length - 1) {
+						self.current().body.push(right, ";");
+					} else {
+						self.return_(right);
+					}
+				});
+				break;
+			case AST.Literal:
+				expression = this.escape(ast.value);
+				this.assign(intoId, expression);
+				recursionFn(intoId || expression);
+				break;
+			case AST.UnaryExpression:
+				this.recurse(ast.argument, undefined, undefined, function (expr) {
+					right = expr;
+				});
+				expression = ast.operator + "(" + this.ifDefined(right, 0) + ")";
+				this.assign(intoId, expression);
+				recursionFn(expression);
+				break;
+			case AST.BinaryExpression:
+				this.recurse(ast.left, undefined, undefined, function (expr) {
+					left = expr;
+				});
+				this.recurse(ast.right, undefined, undefined, function (expr) {
+					right = expr;
+				});
+				if (ast.operator === "+") {
+					expression = this.plus(left, right);
+				} else if (ast.operator === "-") {
+					expression =
+						this.ifDefined(left, 0) + ast.operator + this.ifDefined(right, 0);
+				} else {
+					expression = "(" + left + ")" + ast.operator + "(" + right + ")";
+				}
+				this.assign(intoId, expression);
+				recursionFn(expression);
+				break;
+			case AST.LogicalExpression:
+				intoId = intoId || this.nextId();
+				self.recurse(ast.left, intoId);
+				self.if_(
+					ast.operator === "&&" ? intoId : self.not(intoId),
+					self.lazyRecurse(ast.right, intoId)
+				);
+				recursionFn(intoId);
+				break;
+			case AST.ConditionalExpression:
+				intoId = intoId || this.nextId();
+				self.recurse(ast.test, intoId);
+				self.if_(
+					intoId,
+					self.lazyRecurse(ast.alternate, intoId),
+					self.lazyRecurse(ast.consequent, intoId)
+				);
+				recursionFn(intoId);
+				break;
+			case AST.Identifier:
+				intoId = intoId || this.nextId();
+				var inAssignment = self.current().inAssignment;
+				if (nameId) {
+					if (inAssignment) {
+						nameId.context = this.assign(this.nextId(), "s");
+					} else {
+						nameId.context =
+							self.stage === "inputs"
+								? "s"
+								: this.assign(
+										this.nextId(),
+										this.getHasOwnProperty("l", ast.name) + "?l:s"
+									);
+					}
+					nameId.computed = false;
+					nameId.name = ast.name;
+				}
+				self.if_(
+					self.stage === "inputs" ||
+						self.not(self.getHasOwnProperty("l", ast.name)),
+					function () {
+						self.if_(
+							self.stage === "inputs" ||
+								self.and_(
+									"s",
+									self.or_(
+										self.isNull(self.nonComputedMember("s", ast.name)),
+										self.hasOwnProperty_("s", ast.name)
+									)
+								),
+							function () {
+								if (create && create !== 1) {
+									self.if_(
+										self.isNull(self.nonComputedMember("s", ast.name)),
+										self.lazyAssign(self.nonComputedMember("s", ast.name), "{}")
+									);
+								}
+								self.assign(intoId, self.nonComputedMember("s", ast.name));
+							}
+						);
+					},
+					intoId &&
+						self.lazyAssign(intoId, self.nonComputedMember("l", ast.name))
+				);
+				recursionFn(intoId);
+				break;
+			case AST.MemberExpression:
+				left = (nameId && (nameId.context = this.nextId())) || this.nextId();
+				intoId = intoId || this.nextId();
+				self.recurse(
+					ast.object,
+					left,
+					undefined,
+					function () {
+						var member = null;
+						var inAssignment = self.current().inAssignment;
+						if (ast.computed) {
+							right = self.nextId();
+							if (inAssignment || self.state.computing === "assign") {
+								member = self.unsafeComputedMember(left, right);
+							} else {
+								member = self.computedMember(left, right);
+							}
+						} else {
+							if (inAssignment || self.state.computing === "assign") {
+								member = self.unsafeNonComputedMember(left, ast.property.name);
+							} else {
+								member = self.nonComputedMember(left, ast.property.name);
+							}
+							right = ast.property.name;
+						}
+
+						if (ast.computed) {
+							if (ast.property.type === AST.Literal) {
+								self.recurse(ast.property, right);
+							}
+						}
+						self.if_(
+							self.and_(
+								self.notNull(left),
+								self.or_(
+									self.isNull(member),
+									self.hasOwnProperty_(left, right, ast.computed)
+								)
+							),
+							function () {
+								if (ast.computed) {
+									if (ast.property.type !== AST.Literal) {
+										self.recurse(ast.property, right);
+									}
+									if (create && create !== 1) {
+										self.if_(self.not(member), self.lazyAssign(member, "{}"));
+									}
+									self.assign(intoId, member);
+									if (nameId) {
+										nameId.computed = true;
+										nameId.name = right;
+									}
+								} else {
+									if (create && create !== 1) {
+										self.if_(
+											self.isNull(member),
+											self.lazyAssign(member, "{}")
+										);
+									}
+									self.assign(intoId, member);
+									if (nameId) {
+										nameId.computed = false;
+										nameId.name = ast.property.name;
+									}
+								}
+							},
+							function () {
+								self.assign(intoId, "undefined");
+							}
+						);
+						recursionFn(intoId);
+					},
+					!!create
+				);
+				break;
+			case AST.CallExpression:
+				intoId = intoId || this.nextId();
+				if (ast.filter) {
+					right = self.filter(ast.callee.name);
+					args = [];
+					forEach(ast.arguments, function (expr) {
+						var argument = self.nextId();
+						self.recurse(expr, argument);
+						args.push(argument);
+					});
+					expression = right + ".call(" + right + "," + args.join(",") + ")";
+					self.assign(intoId, expression);
+					recursionFn(intoId);
+				} else {
+					right = self.nextId();
+					left = {};
+					args = [];
+					self.recurse(ast.callee, right, left, function () {
+						self.if_(
+							self.notNull(right),
+							function () {
+								forEach(ast.arguments, function (expr) {
+									self.recurse(
+										expr,
+										ast.constant ? undefined : self.nextId(),
+										undefined,
+										function (argument) {
+											args.push(argument);
+										}
+									);
+								});
+								if (left.name) {
+									var x = self.member(left.context, left.name, left.computed);
+									expression =
+										"(" +
+										x +
+										" === null ? null : " +
+										self.unsafeMember(left.context, left.name, left.computed) +
+										".call(" +
+										[left.context].concat(args).join(",") +
+										"))";
+								} else {
+									expression = right + "(" + args.join(",") + ")";
+								}
+								self.assign(intoId, expression);
+							},
+							function () {
+								self.assign(intoId, "undefined");
+							}
+						);
+						recursionFn(intoId);
+					});
+				}
+				break;
+			case AST.AssignmentExpression:
+				right = this.nextId();
+				left = {};
+				self.current().inAssignment = true;
+				this.recurse(
+					ast.left,
+					undefined,
+					left,
+					function () {
+						self.if_(
+							self.and_(
+								self.notNull(left.context),
+								self.or_(
+									self.hasOwnProperty_(left.context, left.name),
+									self.isNull(
+										self.member(left.context, left.name, left.computed)
+									)
+								)
+							),
+							function () {
+								self.recurse(ast.right, right);
+								expression =
+									self.member(left.context, left.name, left.computed) +
+									ast.operator +
+									right;
+								self.assign(intoId, expression);
+								recursionFn(intoId || expression);
+							}
+						);
+						self.current().inAssignment = false;
+						self.recurse(ast.right, right);
+						self.current().inAssignment = true;
+					},
+					1
+				);
+				self.current().inAssignment = false;
+				break;
+			case AST.ArrayExpression:
+				args = [];
+				forEach(ast.elements, function (expr) {
+					self.recurse(
+						expr,
+						ast.constant ? undefined : self.nextId(),
+						undefined,
+						function (argument) {
+							args.push(argument);
+						}
+					);
+				});
+				expression = "[" + args.join(",") + "]";
+				this.assign(intoId, expression);
+				recursionFn(intoId || expression);
+				break;
+			case AST.ObjectExpression:
+				args = [];
+				computed = false;
+				forEach(ast.properties, function (property) {
+					if (property.computed) {
+						computed = true;
+					}
+				});
+				if (computed) {
+					intoId = intoId || this.nextId();
+					this.assign(intoId, "{}");
+					forEach(ast.properties, function (property) {
+						if (property.computed) {
+							left = self.nextId();
+							self.recurse(property.key, left);
+						} else {
+							left =
+								property.key.type === AST.Identifier
+									? property.key.name
+									: "" + property.key.value;
+						}
+						right = self.nextId();
+						self.recurse(property.value, right);
+						self.assign(
+							self.unsafeMember(intoId, left, property.computed),
+							right
+						);
+					});
+				} else {
+					forEach(ast.properties, function (property) {
+						self.recurse(
+							property.value,
+							ast.constant ? undefined : self.nextId(),
+							undefined,
+							function (expr) {
+								args.push(
+									self.escape(
+										property.key.type === AST.Identifier
+											? property.key.name
+											: "" + property.key.value
+									) +
+										":" +
+										expr
+								);
+							}
+						);
+					});
+					expression = "{" + args.join(",") + "}";
+					this.assign(intoId, expression);
+				}
+				recursionFn(intoId || expression);
+				break;
+			case AST.ThisExpression:
+				this.assign(intoId, "s");
+				recursionFn(intoId || "s");
+				break;
+			case AST.LocalsExpression:
+				this.assign(intoId, "l");
+				recursionFn(intoId || "l");
+				break;
+			case AST.NGValueParameter:
+				this.assign(intoId, "v");
+				recursionFn(intoId || "v");
+				break;
+		}
+	},
+
+	getHasOwnProperty: function (element, property) {
+		var key = element + "." + property;
+		var own = this.current().own;
+		if (!own.hasOwnProperty(key)) {
+			own[key] = this.nextId(
+				false,
+				element + "&&(" + this.escape(property) + " in " + element + ")"
+			);
+		}
+		return own[key];
+	},
+
+	assign: function (id, value) {
+		if (!id) {
+			return;
+		}
+		this.current().body.push(id, "=", value, ";");
+		return id;
+	},
+
+	filter: function (filterName) {
+		if (!this.state.filters.hasOwnProperty(filterName)) {
+			this.state.filters[filterName] = this.nextId(true);
+		}
+		return this.state.filters[filterName];
+	},
+
+	ifDefined: function (id, defaultValue) {
+		return "ifDefined(" + id + "," + this.escape(defaultValue) + ")";
+	},
+
+	plus: function (left, right) {
+		return "plus(" + left + "," + right + ")";
+	},
+
+	return_: function (id) {
+		this.current().body.push("return ", id, ";");
+	},
+
+	if_: function (test, alternate, consequent) {
+		if (test === true) {
+			alternate();
+		} else {
+			var body = this.current().body;
+			body.push("if(", test, "){");
+			alternate();
+			body.push("}");
+			if (consequent) {
+				body.push("else{");
+				consequent();
+				body.push("}");
+			}
+		}
+	},
+	or_: function (expr1, expr2) {
+		return "(" + expr1 + ") || (" + expr2 + ")";
+	},
+	hasOwnProperty_: function (obj, prop, computed) {
+		if (computed) {
+			return "(Object.prototype.hasOwnProperty.call(" + obj + "," + prop + "))";
+		}
+		return "(Object.prototype.hasOwnProperty.call(" + obj + ",'" + prop + "'))";
+	},
+	and_: function (expr1, expr2) {
+		return "(" + expr1 + ") && (" + expr2 + ")";
+	},
+	not: function (expression) {
+		return "!(" + expression + ")";
+	},
+
+	isNull: function (expression) {
+		return expression + "==null";
+	},
+
+	notNull: function (expression) {
+		return expression + "!=null";
+	},
+
+	nonComputedMember: function (left, right) {
+		var SAFE_IDENTIFIER = /^[$_a-zA-Z][$_a-zA-Z0-9]*$/;
+		var UNSAFE_CHARACTERS = /[^$_a-zA-Z0-9]/g;
+		var expr = "";
+		if (SAFE_IDENTIFIER.test(right)) {
+			expr = left + "." + right;
+		} else {
+			right = right.replace(UNSAFE_CHARACTERS, this.stringEscapeFn);
+			expr = left + '["' + right + '"]';
+		}
+
+		return expr;
+	},
+
+	unsafeComputedMember: function (left, right) {
+		return left + "[" + right + "]";
+	},
+	unsafeNonComputedMember: function (left, right) {
+		return this.nonComputedMember(left, right);
+	},
+
+	computedMember: function (left, right) {
+		if (this.state.computing === "assign") {
+			return this.unsafeComputedMember(left, right);
+		}
+		// return left + "[" + right + "]";
+		return (
+			"(" +
+			left +
+			".hasOwnProperty(" +
+			right +
+			") ? " +
+			left +
+			"[" +
+			right +
+			"] : null)"
+		);
+	},
+
+	unsafeMember: function (left, right, computed) {
+		if (computed) {
+			return this.unsafeComputedMember(left, right);
+		}
+		return this.unsafeNonComputedMember(left, right);
+	},
+
+	member: function (left, right, computed) {
+		if (computed) {
+			return this.computedMember(left, right);
+		}
+		return this.nonComputedMember(left, right);
+	},
+
+	getStringValue: function (item) {
+		this.assign(item, "getStringValue(" + item + ")");
+	},
+
+	lazyRecurse: function (
+		ast,
+		intoId,
+		nameId,
+		recursionFn,
+		create,
+		skipWatchIdCheck
+	) {
+		var self = this;
+		return function () {
+			self.recurse(ast, intoId, nameId, recursionFn, create, skipWatchIdCheck);
+		};
+	},
+
+	lazyAssign: function (id, value) {
+		var self = this;
+		return function () {
+			self.assign(id, value);
+		};
+	},
+
+	stringEscapeRegex: /[^ a-zA-Z0-9]/g,
+
+	stringEscapeFn: function (c) {
+		return "\\u" + ("0000" + c.charCodeAt(0).toString(16)).slice(-4);
+	},
+
+	escape: function (value) {
+		if (isString(value)) {
+			return (
+				"'" + value.replace(this.stringEscapeRegex, this.stringEscapeFn) + "'"
+			);
+		}
+		if (isNumber(value)) {
+			return value.toString();
+		}
+		if (value === true) {
+			return "true";
+		}
+		if (value === false) {
+			return "false";
+		}
+		if (value === null) {
+			return "null";
+		}
+		if (typeof value === "undefined") {
+			return "undefined";
+		}
+
+		throw $parseMinErr("esc", "IMPOSSIBLE");
+	},
+
+	nextId: function (skip, init) {
+		var id = "v" + this.state.nextId++;
+		if (!skip) {
+			this.current().vars.push(id + (init ? "=" + init : ""));
+		}
+		return id;
+	},
+
+	current: function () {
+		return this.state[this.state.computing];
 	},
 };
 
