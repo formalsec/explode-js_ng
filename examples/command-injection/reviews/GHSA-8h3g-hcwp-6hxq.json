@@ -1,34 +1,34 @@
 {
     "advisory": {
-        "id": "GHSA-h42j-mrmp-9369",
+        "id": "GHSA-8h3g-hcwp-6hxq",
         "cwe": "CWE-78"
     },
     "correct_cwe": "CWE-78",
-    "correct_package_link": "https://registry.npmjs.org/git-commit-info/-/git-commit-info-2.0.1.tgz",
+    "correct_package_link": "https://registry.npmjs.org/semver-tags/-/semver-tags-0.4.10.tgz",
     "vulnerability": {
         "vulnerability_location": [
             {
                 "source": {
-                    "file": "dest/index.js",
+                    "file": "lib/get-tags.js",
                     "lineno": 21,
-                    "code": "var gitCommitInfo = function (options) {"
+                    "code": "const getGitTagsRemote = (path, cb) => {"
                 },
                 "sink": {
                     "file": "dest/index.js",
-                    "lineno": 39,
-                    "code": "var stdout = execa_1.default.commandSync(\"git --no-pager show \" + thisCommit + \" --summary\", {"
+                    "lineno": 22,
+                    "code": "cp.exec('git ls-remote --tags \"' + path + '\"', (err, stdout, stderr) => {"
                 }
             }, 
         ]
     },
     "poc": [
         {
-            "url": "https://security.snyk.io/vuln/SNYK-JS-GITCOMMITINFO-5740174"
+            "url": "https://security.snyk.io/vuln/SNYK-JS-SEMVERTAGS-3175612"
         }
     ],
     "patch": [
         {
-            "url": "https://github.com/JPeer264/node-git-commit-info/commit/f7c491ede51f886a988af9b266797cb24591d18c"
+            "url": ""
         }
     ],
     "tools": {
