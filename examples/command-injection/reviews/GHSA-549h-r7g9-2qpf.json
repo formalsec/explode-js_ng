@@ -1,0 +1,63 @@
+{
+    "advisory": {
+        "id": "GHSA-549h-r7g9-2qpf",
+        "cwe": "CWE-78"
+    },
+    "correct_cwe": "CWE-78",
+    "correct_package_link": "https://registry.npmjs.org/n158/-/n158-1.4.1.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "src/cli/initProject.js",
+                    "lineno": 4,
+                    "code": "module.exports = function (seedPath, targetPath) {"
+                },
+                "sink": {
+                    "file": "src/cli/initProject.js",
+                    "lineno": 8,
+                    "code": "shell.exec('sh -c \'cd '+targetPath+' && npm install\'');"
+                }
+            }, 
+        ]
+    },
+    "poc": [
+        {
+            "url": "https://security.snyk.io/vuln/SNYK-JS-N158-3183746"
+        }
+    ],
+    "patch": [
+        {
+            "url": ""
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
+}

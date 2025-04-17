@@ -1,0 +1,63 @@
+{
+    "advisory": {
+        "id": "GHSA-3hvj-2783-34x2",
+        "cwe": "CWE-1321"
+    },
+    "correct_cwe": "CWE-1321",
+    "correct_package_link": "https://registry.npmjs.org/njwt/-/njwt-2.0.0.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "index.js",
+                    "lineno": 343,
+                    "code": "Verifier.prototype.verify = function verify(jwtString,cb){"
+                },
+                "sink": {
+                    "file": "index.js",
+                    "lineno": 127,
+                    "code": "acc[key] = header[key];"
+                }
+            }, 
+        ]
+    },
+    "poc": [
+        {
+            "url": "https://github.com/chrisandoryan/vuln-advisory/blob/main/nJwt/CVE-2024-34273.md"
+        }
+    ],
+    "patch": [
+        {
+            "url": "https://github.com/jwtk/njwt/commit/ec9483b6eec1150d56f772ddd308c2bbdf2f98f4"
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
+}

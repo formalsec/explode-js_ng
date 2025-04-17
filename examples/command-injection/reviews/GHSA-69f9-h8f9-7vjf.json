@@ -1,0 +1,75 @@
+{
+    "advisory": {
+        "id": "GHSA-69f9-h8f9-7vjf",
+        "cwe": "CWE-78"
+    },
+    "correct_cwe": "CWE-78",
+    "correct_package_link": "https://registry.npmjs.org/snyk-php-plugin/-/snyk-php-plugin-1.9.4.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "dist/system-deps.js",
+                    "lineno": 8,
+                    "code": "function systemDeps(basePath, options) {"
+                },
+                "sink": {
+                    "file": "dist/composer-commands.js",
+                    "lineno": 9,
+                    "code": "return cmd && childProcess.spawnSync(cmd, { shell: true }).status === 0;"
+                }
+            },
+            {
+                "source": {
+                    "file": "dist/system-deps.js",
+                    "lineno": 8,
+                    "code": "function systemDeps(basePath, options) {"
+                },
+                "sink": {
+                    "file": "dist/composer-commands.js",
+                    "lineno": 14,
+                    "code": "return childProcess.execSync(cmd, { cwd: basePath }).toString();"
+                }
+            }, 
+        ]
+    },
+    "poc": [
+        {
+            "url": ""
+        }
+    ],
+    "patch": [
+        {
+            "url": "https://github.com/snyk/snyk-php-plugin/commit/9189f093b94f9ce51672f6919ffbc98171fd66d4"
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
+}

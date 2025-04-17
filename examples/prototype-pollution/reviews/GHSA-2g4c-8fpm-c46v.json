@@ -1,0 +1,63 @@
+{
+    "advisory": {
+        "id": "GHSA-2g4c-8fpm-c46v",
+        "cwe": "CWE-1321"
+    },
+    "correct_cwe": "CWE-1321",
+    "correct_package_link": "https://registry.npmjs.org/web3-utils/-/web3-utils-4.2.1-dev.f696e47.0.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "lib/commonjs/objects.js",
+                    "lineno": 34,
+                    "code": "const mergeDeep = (destination, ...sources) => {"
+                },
+                "sink": {
+                    "file": "lib/commonjs/objects.js",
+                    "lineno": 53,
+                    "code": "result[key] = src[key];"
+                }
+            }, 
+        ]
+    },
+    "poc": [
+        {
+            "url": "https://security.snyk.io/vuln/SNYK-JS-WEB3UTILS-6229337"
+        }
+    ],
+    "patch": [
+        {
+            "url": "https://github.com/web3/web3.js/commit/8ed041c6635d807b3da8960ad49e125e3d1b0e80"
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
+}

@@ -1,0 +1,63 @@
+{
+    "advisory": {
+        "id": "GHSA-62cx-5xj4-wfm4",
+        "cwe": "CWE-78"
+    },
+    "correct_cwe": "CWE-78",
+    "correct_package_link": "https://registry.npmjs.org/ggit/-/ggit-2.4.12.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "src/fetch-tags.js",
+                    "lineno": 6,
+                    "code": "function fetchTags (branch) {"
+                },
+                "sink": {
+                    "file": "src/fetch-tags.js",
+                    "lineno": 10,
+                    "code": "return exec.exec(cmd)"
+                }
+            }, 
+        ]
+    },
+    "poc": [
+        {
+            "url": "https://gist.github.com/lirantal/d8f87b366d2078e6118ab7bf2b005f02"
+        }
+    ],
+    "patch": [
+        {
+            "url": ""
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
+}

@@ -1,0 +1,76 @@
+{
+    "advisory": {
+        "id": "GHSA-3q56-9cc2-46j4",
+        "cwe": "CWE-1321"
+    },
+    "correct_cwe": "CWE-1321",
+    "correct_package_link": "https://registry.npmjs.org/fast-loops/-/fast-loops-1.1.3.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "lib/objectMergeDeep.js",
+                    "lineno": 10,
+                    "code": "function objectMergeDeep() {"
+                },
+                "sink": {
+                    "file": "lib/objectMergeDeep.js",
+                    "lineno": 20,
+                    "code": "base[key] = objectMergeDeep(base[key], value);"
+                }
+            },
+            {
+                "source": {
+                    "file": "lib/objectMergeDeep.js",
+                    "lineno": 10,
+                    "code": "function objectMergeDeep() {"
+                },
+                "sink": {
+                    "file": "lib/objectMergeDeep.js",
+                    "lineno": 24,
+                    "code": "base[key] = value;"
+                }
+            }, 
+
+        ]
+    },
+    "poc": [
+        {
+            "url": "https://gist.github.com/mestrtee/f09a507c8d59fbbb7fd40880cd9b87ed"
+        }
+    ],
+    "patch": [
+        {
+            "url": "https://github.com/robinweser/fast-loops/commit/6743acf64af832b7a0bbecf95cb4c7d95a3b766e"
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
+}

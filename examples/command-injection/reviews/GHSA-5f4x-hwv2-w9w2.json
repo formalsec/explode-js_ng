@@ -1,0 +1,63 @@
+{
+    "advisory": {
+        "id": "GHSA-5f4x-hwv2-w9w2",
+        "cwe": "CWE-78"
+    },
+    "correct_cwe": "CWE-78",
+    "correct_package_link": "https://registry.npmjs.org/hfs/-/hfs-0.52.9.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "src/util-os.js",
+                    "lineno": 15,
+                    "code": "function getDiskSpaceSync(path) {"
+                },
+                "sink": {
+                    "file": "src/utils-os.js",
+                    "lineno": 26,
+                    "code": "const out = (0, misc_1.try_)(() => (0, child_process_1.execSync)(`df -k \"${path}\"`).toString(), err => { throw err.status === 1 ? Error('miss') : err.status === 127 ? Error('unsupported') : err; });"
+                }
+            }, 
+        ]
+    },
+    "poc": [
+        {
+            "url": ""
+        }
+    ],
+    "patch": [
+        {
+            "url": "https://github.com/rejetto/hfs/commit/305381bd36eee074fb238b64302a252668daad1d"
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
+}
