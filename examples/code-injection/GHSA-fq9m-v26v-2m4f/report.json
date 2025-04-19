@@ -1,0 +1,65 @@
+{
+    "package" : "lilconfig",
+    "version" : "3.1.0",
+    "advisory": {
+        "id": "GHSA-fq9m-v26v-2m4f",
+        "cwe": "CWE-94"
+    },
+    "correct_cwe": "CWE-94",
+    "correct_package_link": "https://registry.npmjs.org/lilconfig/-/lilconfig-3.1.0.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "dist/index.js",
+                    "lineno": 56,
+                    "code": "exports.defaultLoaders = Object.freeze({"
+                },
+                "sink": {
+                    "file": "dist/index.js",
+                    "lineno": 37,
+                    "code": "const mod = await eval(`import('${id}')`);"
+                }
+            }
+        ]
+    },
+    "poc": [
+        {
+            "url": "https://security.snyk.io/vuln/SNYK-JS-LILCONFIG-6263789"
+        }
+    ],
+    "patch": [
+        {
+            "url": "https://github.com/antonk52/lilconfig/commit/2c68a1ab8764fc74acc46771e1ad39ab07a9b0a7"
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
+}

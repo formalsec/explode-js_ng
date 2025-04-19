@@ -1,0 +1,65 @@
+{
+    "package" : "@hono/node-server",
+    "version" : "1.4.0",
+    "advisory": {
+        "id": "GHSA-rjq5-w47x-x359",
+        "cwe": "CWE-22"
+    },
+    "correct_cwe": "CWE-22",
+    "correct_package_link": "https://registry.npmjs.org/@hono/node-server/-/node-server-1.4.0.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "dist/request.js",
+                    "lineno": 85,
+                    "code": "var newRequest = (incoming) => {"
+                },
+                "sink": {
+                    "file": "dist/index.js",
+                    "lineno": 68,
+                    "code": "return `http://${this[incomingKey].headers.host}${this[incomingKey].url}`;"
+                }
+            }
+        ]
+    },
+    "poc": [
+        {
+            "url": "https://github.com/advisories/GHSA-rjq5-w47x-x359"
+        }
+    ],
+    "patch": [
+        {
+            "url": "https://github.com/honojs/node-server/commit/dd9b9a9b23e3896403c90a740e7f1f0892feb402"
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
+}

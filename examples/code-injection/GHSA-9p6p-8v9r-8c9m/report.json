@@ -1,0 +1,66 @@
+{
+    "package": "js-deobfuscator",
+    "version": "1.0.20",
+    "advisory": {
+        "id": "GHSA-9p6p-8v9r-8c9m",
+        "cwe": "CWE-94"
+    },
+    "correct_cwe": "CWE-94",
+    "correct_package_link": "https://registry.npmjs.org/js-deobfuscator/-/js-deobfuscator-1.0.20.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "dist/index.js",
+                    "lineno": 43,
+                    "code": "function deobfuscate(source, config = defaultConfig) {"
+                },
+                "sink": {
+                    "file": "dist/modifications/expressions/expressionSimplifier.js",
+                    "lineno": 164,
+                    "code": "value = eval(code);"
+                }
+            }
+        ]
+    },
+    "poc": [
+        {
+            "url": "https://github.com/ben-sb/javascript-deobfuscator/security/advisories/GHSA-9p6p-8v9r-8c9m"
+        }
+    ],
+    "patch": [
+        {
+            "url": "https://github.com/ben-sb/javascript-deobfuscator/commit/630d3caec83d5f31c5f7a07e6fadf613d06699d6"
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
+}
+

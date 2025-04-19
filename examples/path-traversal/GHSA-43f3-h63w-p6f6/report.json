@@ -1,0 +1,65 @@
+{
+    "package" : "@saltcorn/server",
+    "version" : "1.0.0",
+    "advisory": {
+        "id": "GHSA-43f3-h63w-p6f6",
+        "cwe": "CWE-22"
+    },
+    "correct_cwe": "CWE-22",
+    "correct_package_link": "https://registry.npmjs.org/@saltcorn/server/-/server-1.0.0-beta.15.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "routes/sync.js",
+                    "lineno": 337,
+                    "code": "const { dir_name } = req.body;"
+                },
+                "sink": {
+                    "file": "router/sync.js",
+                    "lineno": 346,
+                    "code": "await fs.rm(syncDir, { recursive: true, force: true });"
+                }
+            }
+        ]
+    },
+    "poc": [
+        {
+            "url": "https://github.com/advisories/GHSA-43f3-h63w-p6f6"
+        }
+    ],
+    "patch": [
+        {
+            "url": "https://github.com/saltcorn/saltcorn/commit/3c551261d0e230635774798009951fa83a07cc3a"
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
+}

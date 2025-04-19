@@ -1,0 +1,90 @@
+{
+    "package" : "@actions/artifact",
+    "version" : "2.1.1",
+    "advisory": {
+        "id": "GHSA-6q32-hq47-5qq3",
+        "cwe": "CWE-22"
+    },
+    "correct_cwe": "CWE-22",
+    "correct_package_link": "https://registry.npmjs.org/@actions/artifact/-/artifact-2.1.1.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "lib/internal/download/download-artifact.js",
+                    "lineno": 89,
+                    "code": "function streamExtractExternal(url, directory) {"
+                },
+                "sink": {
+                    "file": "lib/internal/download/download-artifact.js",
+                    "lineno": 111,
+                    "code": ".pipe(unzip_stream_1.default.Extract({ path: directory }))"
+                }
+            },
+            {
+                "source": {
+                    "file": "lib/internal/download/download-artifact.js",
+                    "lineno": 123,
+                    "code": "function downloadArtifactPublic(artifactId, repositoryOwner, repositoryName, token, options) {"
+                },
+                "sink": {
+                    "file": "lib/internal/download/download-artifact.js",
+                    "lineno": 111,
+                    "code": ".pipe(unzip_stream_1.default.Extract({ path: directory }))"
+                }
+            },
+            {
+                "source": {
+                    "file": "lib/internal/download/download-artifact.js",
+                    "lineno": 157,
+                    "code": "function downloadArtifactInternal(artifactId, options) {"
+                },
+                "sink": {
+                    "file": "lib/internal/download/download-artifact.js",
+                    "lineno": 111,
+                    "code": ".pipe(unzip_stream_1.default.Extract({ path: directory }))"
+                }
+            }
+
+        ]
+    },
+    "poc": [
+        {
+            "url": ""
+        }
+    ],
+    "patch": [
+        {
+            "url": "https://github.com/actions/toolkit/pull/1666/commits/bc5b3a85ae98c7ef52f354703f87e9b94c85ea61"
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
+}

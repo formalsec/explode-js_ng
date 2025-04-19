@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "js-deobfuscator": "^1.0.20"
+  }
+}
