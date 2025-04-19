@@ -1,0 +1,10 @@
+margin=80
+max-indent=2
+module-item-spacing=sparse
+type-decl=sparse
+single-case=compact
+space-around-arrays=true
+space-around-lists=true
+space-around-records=true
+space-around-variants=true
+wrap-comments=true

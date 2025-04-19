@@ -1,0 +1,5 @@
+(executable
+ (name script)
+ (libraries unix yojson ppx_deriving_yojson.runtime)
+ (preprocess
+  (pps ppx_deriving_yojson)))
