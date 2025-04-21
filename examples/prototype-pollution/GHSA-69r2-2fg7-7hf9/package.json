@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@abw/badger-database": "^1.2.1"
+  }
+}
