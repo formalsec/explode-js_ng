@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@75lb/deep-merge": "^1.1.1"
+  }
+}
