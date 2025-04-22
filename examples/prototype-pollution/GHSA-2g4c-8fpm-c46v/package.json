@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "web3-utils": "^4.2.1-dev.f696e47.0"
+  }
+}

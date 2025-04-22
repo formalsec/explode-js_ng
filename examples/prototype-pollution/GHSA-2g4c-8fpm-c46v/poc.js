@@ -1,4 +1,4 @@
-const Web3Utils = require('./vulnerable_slice');
+const Web3Utils = require('web3-utils');
 
 let payload = { ["__proto__"]: { "toString": "polluted" } };
 
