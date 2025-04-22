@@ -1,4 +1,4 @@
-const defaults = require('./vulnerable_slice');
+const defaults = require('@ndhoule/defaults');
 
 let payload = { ["__proto__"]: { "polluted": "yes" } };
 
