@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "gettext.js": "^2.0.2"
+  }
+}
