@@ -1,8 +1,8 @@
-var uplot = require("./vulnerable_slice");
+var Uplot = require("uplot");
 
 let payload = { ["__proto__"]: { "toString": "polluted" } };
 
-uplot({}, payload)
+Uplot.assign({}, payload);
 
 if (({}).toString == "polluted")
   throw Error("I pollute");
