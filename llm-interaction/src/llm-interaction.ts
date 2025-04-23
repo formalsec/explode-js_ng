@@ -2,19 +2,30 @@ import {GoogleGenAI} from "@google/genai";
 import esprima from "esprima";
 import vm from "node:vm";
 
+import {
+  buildExploitResult,
+  buildSyntaxErrorResult,
+  buildRuntimeErrorResult,
+  buildUnsuccessfulRun,
+  buildNoCodeResult,
+  Result,
+} from "./results";
+import {generatePrompt} from "./prompts"
+import {Package} from "./package"
+
+const MAX = 10;
 //LLMs 
 interface LLM {
   ask(prompt: string): Promise<string>;
 }
 
-class Gemini implements LLM {
+class Gemini20Flash implements LLM {
     private client:  GoogleGenAI;
     constructor(apiKey:string) {
         this.client = new GoogleGenAI({apiKey: apiKey});
     }
 
   async ask(prompt: string): Promise<string> {
-    // This is mock logic. In reality, you’d hit the OpenAI API.
     try {
         const response = await this.client.models.generateContent({
             model: "gemini-2.0-flash",
@@ -23,10 +34,11 @@ class Gemini implements LLM {
         return response.text??"";
     }catch (err: any) {
       console.error("Gemini error:", err.message);
-      return "// ERROR: Failed to generate exploit.";
+      return "ERROR: API Error";
     }
   }
 }
+
 
 
 // LLM response parsing
@@ -52,50 +64,105 @@ function validateJS(code: string): { valid: boolean; error?: string } {
   }
 }
 
-function runJS(code: string): any {
+function runJS(code: string): { output: string[]; error?: string } {
   try {
+    const output: string[] = [];
+
+    const sandbox = {
+      console: {
+        log: (msg: any) => output.push(String(msg))
+      }
+    };
+
+    const context = vm.createContext(sandbox);
     const script = new vm.Script(code);
-    const context = vm.createContext({
-      console: console,
-      result: null,
-    });
-    const result = script.runInContext(context);
-    return result;
+    script.runInContext(context);
+
+    return { output };
   } catch (err: any) {
-    return `Runtime error: ${err.message}`;
+    return { output: [], error: err.message };
   }
 }
 
 
-async function main() {
-  const llm: LLM = new Gemini(process.env.GEMINI_KEY || "");
-
-  const prompt = `This is a prompt to test the api send a response with some text and a javascript code block`;
-
-  const answer = await llm.ask(prompt);
-
-
-  console.log("LLM Response:\n", answer);
-  const codeBlocks = extractJSCodeBlocks(answer);
-
+//Complete answer parsing
+function parseLLMAnswer(txt: string, pkg: Package): Result{
+    const codeBlocks: string[] = extractJSCodeBlocks(txt);
+    
     if (codeBlocks.length === 0) {
-    console.error("No JavaScript code found.");
-    } else {
-        for (const code of codeBlocks) {
-            console.log("----- Code Block -----");
-            console.log(code);
+        return buildNoCodeResult();
+    } 
 
-            const validation = validateJS(code);
-            if (!validation.valid) {
-                console.error("❌ Syntax error:", validation.error);
-                continue;
-            }
+    const code = codeBlocks[0]; //Use first code block for now
 
-            console.log("✅ Code is valid. Executing...");
-            const result = runJS(code);
-            console.log("🧪 Result:", result);
-        }
+    const syntaxCheck = validateJS(code);
+    if (!syntaxCheck.valid) {
+        return buildSyntaxErrorResult(syntaxCheck.error ?? "Unknown syntax error");
     }
+
+    const runResult = runJS(code);
+
+    if (runResult.error) {
+        return buildRuntimeErrorResult(code, runResult.error);
+    }
+
+    const outputStr = runResult.output.join("\n");
+
+    // For now return the code need to implement vulnerability triggering check
+    if (outputStr) {
+        return buildExploitResult(code, outputStr);
+    } else {
+        return buildUnsuccessfulRun(code);
+    }
+    
+}
+
+
+async function generateExploit(llm: LLM, pkg: Package, mode: string, result?: Result) : Promise<Result> {
+    var prompt; 
+
+    if (mode == "source_sink") {
+        prompt = generatePrompt("source-sink",pkg ,result); 
+    } else {
+        prompt = generatePrompt("simple", pkg, result);
+    }
+  
+    var answer = await llm.ask(prompt); 
+  
+    var exploit =  parseLLMAnswer(answer, pkg);
+
+    return exploit;
+}
+
+async function LLMRefinementLoop(llm: LLM, pkg: Package, mode: string): Promise<Result> {
+    let result: Result | undefined; 
+    let cur = 0;
+    
+    do {
+        result = await generateExploit(llm, pkg, mode, result); 
+        if (result.type === "ExploitResult") {
+            return result; 
+        }
+  
+    } while (cur < MAX)
+  
+    return result // for now return result of last try maybe create a new Result type to return here
+}
+
+
+
+
+async function main() {
+    const llm: LLM = new Gemini20Flash(process.env.GEMINI_KEY || "");
+
+    const pkg = new Package("input", "output", "./vuln.js", "CWE-94");
+
+    const prompt = generatePrompt("simple", pkg);
+    console.log(prompt); 
+
+    const answer = await llm.ask(prompt);
+    console.log(answer);
+
 }
 
 main();

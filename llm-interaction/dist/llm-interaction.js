@@ -1,12 +1,20 @@
-import { GoogleGenAI } from "@google/genai";
-import esprima from "esprima";
-import vm from "node:vm";
-class Gemini {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const genai_1 = require("@google/genai");
+const esprima_1 = __importDefault(require("esprima"));
+const node_vm_1 = __importDefault(require("node:vm"));
+const results_1 = require("./results");
+const prompts_1 = require("./prompts");
+const package_1 = require("./package");
+const MAX = 10;
+class Gemini20Flash {
     constructor(apiKey) {
-        this.client = new GoogleGenAI({ apiKey: apiKey });
+        this.client = new genai_1.GoogleGenAI({ apiKey: apiKey });
     }
     async ask(prompt) {
-        // This is mock logic. In reality, you’d hit the OpenAI API.
         try {
             const response = await this.client.models.generateContent({
                 model: "gemini-2.0-flash",
@@ -16,10 +24,11 @@ class Gemini {
         }
         catch (err) {
             console.error("Gemini error:", err.message);
-            return "// ERROR: Failed to generate exploit.";
+            return "ERROR: API Error";
         }
     }
 }
+// LLM response parsing
 function extractJSCodeBlocks(text) {
     const codeBlocks = [];
     const codeBlockRegex = /```(?:js|javascript)?\n([\s\S]*?)```/g;
@@ -29,9 +38,10 @@ function extractJSCodeBlocks(text) {
     }
     return codeBlocks;
 }
+//Extracted code validation and running
 function validateJS(code) {
     try {
-        esprima.parseScript(code);
+        esprima_1.default.parseScript(code);
         return { valid: true };
     }
     catch (err) {
@@ -40,40 +50,73 @@ function validateJS(code) {
 }
 function runJS(code) {
     try {
-        const script = new vm.Script(code);
-        const context = vm.createContext({
-            console: console,
-            result: null,
-        });
-        const result = script.runInContext(context);
-        return result;
+        const output = [];
+        const sandbox = {
+            console: {
+                log: (msg) => output.push(String(msg))
+            }
+        };
+        const context = node_vm_1.default.createContext(sandbox);
+        const script = new node_vm_1.default.Script(code);
+        script.runInContext(context);
+        return { output };
     }
     catch (err) {
-        return `Runtime error: ${err.message}`;
+        return { output: [], error: err.message };
     }
 }
-async function main() {
-    const llm = new Gemini(process.env.GEMINI_KEY || "");
-    const prompt = `This is a prompt to test the api send a response with some text and a javascript code block`;
-    const answer = await llm.ask(prompt);
-    console.log("LLM Response:\n", answer);
-    const codeBlocks = extractJSCodeBlocks(answer);
+function parseLLMAnswer(txt, pkg) {
+    const codeBlocks = extractJSCodeBlocks(txt);
     if (codeBlocks.length === 0) {
-        console.error("No JavaScript code found.");
+        return (0, results_1.buildNoCodeResult)();
+    }
+    const code = codeBlocks[0]; //Use first code block for now
+    const syntaxCheck = validateJS(code);
+    if (!syntaxCheck.valid) {
+        return (0, results_1.buildSyntaxErrorResult)(syntaxCheck.error ?? "Unknown syntax error");
+    }
+    const runResult = runJS(code);
+    if (runResult.error) {
+        return (0, results_1.buildRuntimeErrorResult)(code, runResult.error);
+    }
+    const outputStr = runResult.output.join("\n");
+    // For now return the code need to implement vulnerability triggering check
+    if (outputStr) {
+        return (0, results_1.buildExploitResult)(code, outputStr);
     }
     else {
-        for (const code of codeBlocks) {
-            console.log("----- Code Block -----");
-            console.log(code);
-            const validation = validateJS(code);
-            if (!validation.valid) {
-                console.error("❌ Syntax error:", validation.error);
-                continue;
-            }
-            console.log("✅ Code is valid. Executing...");
-            const result = runJS(code);
-            console.log("🧪 Result:", result);
-        }
+        return (0, results_1.buildUnsuccessfulRun)(code);
     }
+}
+async function generateExploit(llm, pkg, mode, result) {
+    var prompt;
+    if (mode == "source_sink") {
+        prompt = (0, prompts_1.generatePrompt)("source-sink", pkg, result);
+    }
+    else {
+        prompt = (0, prompts_1.generatePrompt)("simple", pkg, result);
+    }
+    var answer = await llm.ask(prompt);
+    var exploit = parseLLMAnswer(answer, pkg);
+    return exploit;
+}
+async function LLMRefinementLoop(llm, pkg, mode) {
+    let result;
+    let cur = 0;
+    do {
+        result = await generateExploit(llm, pkg, mode, result);
+        if (result.type === "ExploitResult") {
+            return result;
+        }
+    } while (cur < MAX);
+    return result; // for now return result of last try maybe create a new Result type to return here
+}
+async function main() {
+    const llm = new Gemini20Flash(process.env.GEMINI_KEY || "");
+    const pkg = new package_1.Package("input", "output", "./vuln.js", "CWE-94");
+    const prompt = (0, prompts_1.generatePrompt)("simple", pkg);
+    console.log(prompt);
+    const answer = await llm.ask(prompt);
+    console.log(answer);
 }
 main();

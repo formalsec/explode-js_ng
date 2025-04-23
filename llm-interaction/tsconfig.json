@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2020",            
-    "module": "ESNext",            
+    "module": "CommonJS",          // ✅ Changed from "ESNext" to "CommonJS"
     "moduleResolution": "Node",
     "esModuleInterop": true,
     "strict": true,
@@ -9,4 +9,3 @@
     "rootDir": "./src"
   }
 }
-
