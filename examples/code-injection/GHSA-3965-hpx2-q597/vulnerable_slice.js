@@ -1,7 +1,14 @@
 // node_modules/pug/lib/index.js
+var filters = require('pug-filters');
+var generateCode = require('pug-code-gen');
+var lex = require('pug-lexer');
 var load = require('pug-load');
 var link = require('pug-linker');
 var stripComments = require('pug-strip-comments');
+var parse = require('pug-parser');
+
+
+exports.filters = {};
 
 function applyPlugins(value, options, plugins, name) {
   return plugins.reduce(function(value, plugin) {
@@ -204,13 +211,3 @@ exports.compileClientWithDependenciesTracked = function(str, options) {
 exports.compileClient = function (str, options) {
   return exports.compileClientWithDependenciesTracked(str, options).body;
 };
-
-// node_modules/pug-runtime/wrap.js
-// module.exports = wrap;
-function wrap(template, templateName) {
-  templateName = templateName || 'template';
-  return Function(
-    'pug',
-    template + '\n' + 'return ' + templateName + ';'
-  )(runtime);
-}
