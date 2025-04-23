@@ -108,7 +108,10 @@ function parseLLMAnswer(txt: string, pkg: Package): Result{
 
     const outputStr = runResult.output.join("\n");
 
-    // For now return the code need to implement vulnerability triggering check
+    // 
+    // TODO Exploit success verification logic
+    // 
+
     if (outputStr) {
         return buildExploitResult(code, outputStr);
     } else {
