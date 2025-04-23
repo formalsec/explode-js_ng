@@ -1,4 +1,4 @@
-var Dom = require('./vulnerable_slice');
+const Dom = require('dom-iterator');
 
 var Parser = require('mini-html-parser');
 var html = '<h1></h1>';

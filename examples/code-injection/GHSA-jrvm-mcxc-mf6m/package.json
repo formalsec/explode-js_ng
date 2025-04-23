@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "dom-iterator": "^1.0.0",
+    "mini-html-parser": "^0.0.3"
+  }
+}
