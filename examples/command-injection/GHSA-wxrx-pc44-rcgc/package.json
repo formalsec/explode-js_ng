@@ -1,6 +1,9 @@
 {
     "package" : "keep-module-latest",
     "version" : "1.0.1",
+    "dependencies" : {
+      "keep-module-latest": "1.0.1"
+    },
     "advisory": {
         "id": "GHSA-wxrx-pc44-rcgc",
         "cwe": "CWE-78"

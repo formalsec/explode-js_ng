@@ -1,6 +1,9 @@
 {
     "package" : "chromedriver",
     "version" : "119.0.0",
+    "dependencies" : {
+      "chromedriver": "119.0.0"
+    },
     "advisory": {
         "id": "GHSA-hm92-vgmw-qfmx",
         "cwe": "CWE-78"
