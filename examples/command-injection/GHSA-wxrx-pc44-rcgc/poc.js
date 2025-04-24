@@ -1,7 +1,7 @@
 let fs = require('fs');
 let root = require('keep-module-latest');
-let path = "./success@latest";
+let path = "./success";
 if (fs.existsSync(path))
   fs.unlinkSync(path);
 
-root({ moduleName: "& touch success" });
+resolve(root({ moduleName: "child_process; touch success #" }));
