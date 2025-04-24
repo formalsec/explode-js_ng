@@ -1,5 +1,65 @@
 {
-  "dependencies": {
-    "@blakeembrey/template": "^1.1.0"
-  }
+    "package" : "@blakeembrey/template",
+    "version": "1.1.0",
+    "advisory": {
+        "id": "GHSA-q765-wm9j-66qj",
+        "cwe": "CWE-94"
+    },
+    "correct_cwe": "CWE-94",
+    "correct_package_link": "https://registry.npmjs.org/@blakeembrey/template/-/template-1.1.0.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "dist/index.js",
+                    "lineno": 57,
+                    "code": "function template(value, displayName) {"
+                },
+                "sink": {
+                    "file": "dist/index.js",
+                    "lineno": 51,
+                    "code": "return `function ${displayName}(${INPUT_VAR_NAME}) { return ${result}; }`;"
+                }
+            }
+        ]
+    },
+    "poc": [
+        {
+            "url": "https://github.com/advisories/GHSA-q765-wm9j-66qj"
+        }
+    ],
+    "patch": [
+        {
+            "url": "https://github.com/blakeembrey/js-template/commit/b8d9aa999e464816c6cfb14acd1ad0f5d1e335aa"
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
 }

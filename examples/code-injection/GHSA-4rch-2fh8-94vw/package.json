@@ -1,5 +1,65 @@
 {
-  "dependencies": {
-    "mysql2": "^3.9.6"
-  }
+    "package" : "mysql2",
+    "version" : "3.9.6",
+    "advisory": {
+        "id": "GHSA-4rch-2fh8-94vw",
+        "cwe": "CWE-94"
+    },
+    "correct_cwe": "CWE-94",
+    "correct_package_link": "https://registry.npmjs.org/mysql2/-/mysql2-3.9.6.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "lib/connection.js",
+                    "lineno": 565,
+                    "code": "query(sql, values, cb) {"
+                },
+                "sink": {
+                    "file": "lib/parsers/text_parser.js",
+                    "lineno": 186,
+                    "code": "`${lvalue} = options.typeCast(this.wrap${i}, function() { return ${readCode} });`,"
+                }
+            }
+        ]
+    },
+    "poc": [
+        {
+            "url": "https://security.snyk.io/vuln/SNYK-JS-MYSQL2-6670046"
+        }
+    ],
+    "patch": [
+        {
+            "url": "https://github.com/sidorares/node-mysql2/commit/7d4b098c7e29d5a6cb9eac2633bfcc2f0f1db713"
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
 }
