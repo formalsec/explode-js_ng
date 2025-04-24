@@ -1,5 +1,65 @@
 {
-  "dependencies": {
-    "@abw/badger-database": "^1.2.1"
-  }
+    "package" : "@abw/badger-database",
+    "version" : "1.2.1",
+    "advisory": {
+        "id": "GHSA-69r2-2fg7-7hf9",
+        "cwe": "CWE-1321"
+    },
+    "correct_cwe": "CWE-1321",
+    "correct_package_link": "https://registry.npmjs.org/@abw/badger-database/-/badger-database-1.2.1.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "dist/badger-database.esm.js",
+                    "lineno": 1,
+                    "code": ""
+                },
+                "sink": {
+                    "file": "dist/badger-database.esm.js",
+                    "lineno": 1,
+                    "code": ""
+                }
+            }
+        ]
+    },
+    "poc": [
+        {
+            "url": "https://gist.github.com/mestrtee/f6b2ed1b3b4bc0df994c7455fc6110bd"
+        }
+    ],
+    "patch": [
+        {
+            "url": ""
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
 }
