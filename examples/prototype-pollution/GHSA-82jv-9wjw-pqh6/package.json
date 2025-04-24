@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "derby": "^4.0.0",
+    "derby-starter": "^0.4.8"
+  }
+}
