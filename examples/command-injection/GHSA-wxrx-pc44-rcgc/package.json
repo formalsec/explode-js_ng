@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "jest": "^29.7.0",
+    "keep-module-latest": "^1.0.1"
+  }
+}
