@@ -14,6 +14,7 @@
     "find-exec": "^1.0.2",
     "keep-module-latest": "^1.0.1",
     "semver-tags": "^0.4.10",
-    "snyk-gradle-plugin": "^4.4.0"
+    "snyk-gradle-plugin": "^4.4.0",
+    "snyk-php-plugin": "^1.9.4"
   }
 }
