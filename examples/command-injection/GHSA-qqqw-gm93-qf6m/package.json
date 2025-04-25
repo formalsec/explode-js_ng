@@ -1,6 +1,9 @@
 {
     "package" : "snyk-gradle-plugin",
     "version" : "4.4.0",
+    "dependencies" : {
+      "snyk-gradle-plugin": "4.4.0"
+    },
     "advisory": {
         "id": "GHSA-qqqw-gm93-qf6m",
         "cwe": "CWE-78"

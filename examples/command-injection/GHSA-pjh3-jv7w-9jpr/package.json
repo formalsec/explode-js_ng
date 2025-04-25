@@ -2,7 +2,7 @@
   "package": "gm",
   "version": "1.20.0",
   "dependencies": {
-    "gm": "^1.20.0"
+    "gm": "1.20.0"
   },
   "advisory": {
     "id": "GHSA-pjh3-jv7w-9jpr",
