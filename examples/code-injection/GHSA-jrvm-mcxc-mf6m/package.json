@@ -1,6 +1,10 @@
 {
     "package" : "dom-iterator",
     "version" : "1.0.0",
+    "dependencies": {
+      "dom-iterator": "1.0.0",
+      "mini-html-parser" : "0.0.3"
+    },
     "advisory": {
         "id": "GHSA-jrvm-mcxc-mf6m",
         "cwe": "CWE-94"

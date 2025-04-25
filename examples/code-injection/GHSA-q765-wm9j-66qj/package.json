@@ -1,6 +1,9 @@
 {
     "package" : "@blakeembrey/template",
     "version": "1.1.0",
+    "dependencies": {
+      "@blakeembrey/template" : "1.1.0"
+    },
     "advisory": {
         "id": "GHSA-q765-wm9j-66qj",
         "cwe": "CWE-94"
