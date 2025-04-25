@@ -8,6 +8,7 @@
     "GHSA-jrvm-mcxc-mf6m": "./GHSA-jrvm-mcxc-mf6m/",
     "GHSA-q765-wm9j-66qj": "./GHSA-q765-wm9j-66qj/",
     "GHSA-q849-wxrc-vqrp": "./GHSA-q849-wxrc-vqrp/",
+    "GHSA-v756-4whv-48vc": "./GHSA-v756-4whv-48vc/",
     "GHSA-vwhg-jwr4-vxgg": "./GHSA-vwhg-jwr4-vxgg/"
   },
   "scripts": {
