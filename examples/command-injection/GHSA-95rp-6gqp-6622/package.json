@@ -1,6 +1,9 @@
 {
     "package" : "find-exec",
     "version" : "1.0.2",
+    "dependencies" : {
+      "find-exec" : "1.0.2"
+    },
     "advisory": {
         "id": "GHSA-95rp-6gqp-6622",
         "cwe": "CWE-78"

@@ -8,13 +8,6 @@
     "jest": "^29.7.0"
   },
   "dependencies": {
-    "bwm-ng": "^0.1.1",
-    "child_process": "^1.0.2",
-    "chromedriver": "^119.0.0",
-    "find-exec": "^1.0.2",
-    "keep-module-latest": "^1.0.1",
-    "semver-tags": "^0.4.10",
-    "snyk-gradle-plugin": "^4.4.0",
-    "snyk-php-plugin": "^1.9.4"
+    "command-injection" : "./command-injection/"
   }
 }

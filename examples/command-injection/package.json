@@ -1,0 +1,18 @@
+{
+  "name" : "command-injection",
+  "dependencies" : {
+    "GHSA-62cx-5xj4-wfm4" : "./GHSA-62cx-5xj4-wfm4/",
+    "GHSA-69f9-h8f9-7vjf" : "./GHSA-69f9-h8f9-7vjf/",
+    "GHSA-8h3g-hcwp-6hxq" : "./GHSA-8h3g-hcwp-6hxq/",
+    "GHSA-8vw3-vxmj-h43w" : "./GHSA-8vw3-vxmj-h43w/",
+    "GHSA-95rp-6gqp-6622" : "./GHSA-95rp-6gqp-6622/",
+    "GHSA-hm92-vgmw-qfmx" : "./GHSA-hm92-vgmw-qfmx/",
+    "GHSA-pjh3-jv7w-9jpr" : "./GHSA-pjh3-jv7w-9jpr/",
+    "GHSA-qfxv-qqvg-24pg" : "./GHSA-qfxv-qqvg-24pg/",
+    "GHSA-qqqw-gm93-qf6m" : "./GHSA-qqqw-gm93-qf6m/",
+    "GHSA-wxrx-pc44-rcgc" : "./GHSA-wxrx-pc44-rcgc/"
+  },
+  "scripts": {
+    "test" : "jest"
+  }
+}

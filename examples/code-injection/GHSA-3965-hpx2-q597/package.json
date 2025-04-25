@@ -1,6 +1,9 @@
 {
     "package" : "pug",
     "version" : "3.0.2",
+    "dependencies": {
+      "pug" : "3.0.2"
+    },
     "advisory": {
         "id": "GHSA-3965-hpx2-q597",
         "cwe": "CWE-94"

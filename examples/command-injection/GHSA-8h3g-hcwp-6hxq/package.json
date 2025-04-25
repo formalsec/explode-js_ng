@@ -1,6 +1,9 @@
 {
     "package" : "semver-tags",
     "version" : "0.4.10",
+    "dependencies" : {
+      "semver-tags" : "0.4.10"
+    },
     "advisory": {
         "id": "GHSA-8h3g-hcwp-6hxq",
         "cwe": "CWE-78"
