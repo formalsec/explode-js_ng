@@ -1,6 +1,9 @@
 {
     "package" : "angular-expressions",
     "version" : "1.4.2",
+    "dependencies" : {
+      "angular-expressions" : "1.4.2"
+    },
     "advisory": {
         "id": "GHSA-5462-4vcx-jh7j",
         "cwe": "CWE-94"

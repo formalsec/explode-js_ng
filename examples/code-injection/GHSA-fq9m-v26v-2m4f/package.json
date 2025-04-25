@@ -1,6 +1,9 @@
 {
     "package" : "lilconfig",
     "version" : "3.1.0",
+    "dependencies" : {
+      "lilconfig" : "3.1.0"
+    },
     "advisory": {
         "id": "GHSA-fq9m-v26v-2m4f",
         "cwe": "CWE-94"

@@ -1,0 +1,16 @@
+{
+  "name" : "code-injection",
+  "dependencies" : {
+    "GHSA-3965-hpx2-q597": "./GHSA-3965-hpx2-q597/",
+    "GHSA-5462-4vcx-jh7j": "./GHSA-5462-4vcx-jh7j/",
+    "GHSA-fq9m-v26v-2m4f": "./GHSA-fq9m-v26v-2m4f/",
+    "GHSA-hw8r-x6gr-5gjp": "./GHSA-hw8r-x6gr-5gjp/",
+    "GHSA-jrvm-mcxc-mf6m": "./GHSA-jrvm-mcxc-mf6m/",
+    "GHSA-q765-wm9j-66qj": "./GHSA-q765-wm9j-66qj/",
+    "GHSA-q849-wxrc-vqrp": "./GHSA-q849-wxrc-vqrp/",
+    "GHSA-vwhg-jwr4-vxgg": "./GHSA-vwhg-jwr4-vxgg/"
+  },
+  "scripts": {
+    "test" : "jest"
+  }
+}
