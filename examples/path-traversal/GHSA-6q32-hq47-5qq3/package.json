@@ -1,6 +1,9 @@
 {
     "package" : "@actions/artifact",
     "version" : "2.1.1",
+    "dependencies" : {
+      "@actions/artifact" : "2.1.1"
+    },
     "advisory": {
         "id": "GHSA-6q32-hq47-5qq3",
         "cwe": "CWE-22"
