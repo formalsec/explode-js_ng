@@ -9,7 +9,8 @@
     "GHSA-79h2-v6hh-wq23" : "./GHSA-79h2-v6hh-wq23/",
     "GHSA-7qgg-vw88-cc99" : "./GHSA-7qgg-vw88-cc99/",
     "GHSA-cxm3-284p-qc4v" : "./GHSA-cxm3-284p-qc4v/",
-    "GHSA-f6v4-cf5j-vf3w" : "./GHSA-f6v4-cf5j-vf3w/"
+    "GHSA-f6v4-cf5j-vf3w" : "./GHSA-f6v4-cf5j-vf3w/",
+    "GHSA-jh2m-j8pp-55rc" : "./GHSA-jh2m-j8pp-55rc/"
   },
   "scripts": {
     "test" : "jest"
