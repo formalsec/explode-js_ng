@@ -1,6 +1,9 @@
 {
     "package" : "mapshaper",
     "version" : "0.6.43",
+    "dependencies" : {
+      "mapshaper" : "0.6.43"
+    },
     "advisory": {
         "id": "GHSA-8m36-62rw-9mxw",
         "cwe": "CWE-22"

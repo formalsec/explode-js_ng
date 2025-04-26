@@ -1,6 +1,9 @@
 {
     "package" : "langchain",
     "version" : "0.2.18",
+    "dependencies" : {
+      "langchain" : "0.2.18"
+    },
     "advisory": {
         "id": "GHSA-hc5w-c9f8-9cc4",
         "cwe": "CWE-22"

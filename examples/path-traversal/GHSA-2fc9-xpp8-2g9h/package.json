@@ -1,6 +1,9 @@
 {
-    "package" : "backend-common",
+    "package" : "@backstage/backend-common",
     "version" : "0.21.0",
+    "dependencies" : {
+      "@backstage/backend-common" : "0.21.0"
+    },
     "advisory": {
         "id": "GHSA-2fc9-xpp8-2g9h",
         "cwe": "CWE-22"
