@@ -2,15 +2,9 @@
   "name" : "path-traversal",
   "dependencies" : {
     "GHSA-2fc9-xpp8-2g9h": "./GHSA-2fc9-xpp8-2g9h/",
-    "GHSA-3mpf-rcc7-5347": "./GHSA-3mpf-rcc7-5347/",
-    "GHSA-43f3-h63w-p6f6": "./GHSA-43f3-h63w-p6f6/",
     "GHSA-6jrj-vc65-c983": "./GHSA-6jrj-vc65-c983/",
-    "GHSA-6q32-hq47-5qq3": "./GHSA-6q32-hq47-5qq3/",
     "GHSA-8m36-62rw-9mxw": "./GHSA-8m36-62rw-9mxw/",
-    "GHSA-ccqh-278p-xq6w": "./GHSA-ccqh-278p-xq6w/",
     "GHSA-hc5w-c9f8-9cc4": "./GHSA-hc5w-c9f8-9cc4/",
-    "GHSA-rjq5-w47x-x359": "./GHSA-rjq5-w47x-x359/",
-    "GHSA-vc6q-ccj9-9r89": "./GHSA-vc6q-ccj9-9r89/",
     "GHSA-xpqw-fqpw-35fc": "./GHSA-xpqw-fqpw-35fc/"
   },
   "scripts": {

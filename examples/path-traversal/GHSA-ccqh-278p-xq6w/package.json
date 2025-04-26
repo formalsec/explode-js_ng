@@ -1,6 +1,9 @@
 {
     "package" : "webcrack",
     "version" : "2.14.0",
+    "dependencies" : {
+      "webcrack" : "2.14.0"
+    },
     "advisory": {
         "id": "GHSA-ccqh-278p-xq6w",
         "cwe": "CWE-22"
