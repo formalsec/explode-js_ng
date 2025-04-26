@@ -1,0 +1,18 @@
+{
+  "package" : "open-device",
+  "version" : "4.0.1",
+  "dependencies": {
+    "open-device": "4.0.1"
+  },
+  "advisory" : {
+    "id": "GHSA-jpjp-vxv6-59hm",
+    "cwe" : "CWE-22"
+  },
+  "links": {
+    "source1": "https://security.snyk.io/vuln/npm:open-device:20170430",
+    "source2": "https://github.com/advisories/GHSA-jpjp-vxv6-59hm"
+  },
+  "fixedVersion": "n/a",
+  "fixCommit": "n/a",
+  "sink": "lib/server-accessible.js:14:12"
+}

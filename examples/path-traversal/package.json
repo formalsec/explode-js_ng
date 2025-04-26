@@ -6,7 +6,8 @@
     "GHSA-8m36-62rw-9mxw": "./GHSA-8m36-62rw-9mxw/",
     "GHSA-hc5w-c9f8-9cc4": "./GHSA-hc5w-c9f8-9cc4/",
     "GHSA-xpqw-fqpw-35fc": "./GHSA-xpqw-fqpw-35fc/",
-    "GHSA-899g-6q6w-7v94": "./GHSA-899g-6q6w-7v94/"
+    "GHSA-899g-6q6w-7v94": "./GHSA-899g-6q6w-7v94/",
+    "GHSA-jpjp-vxv6-59hm": "./GHSA-jpjp-vxv6-59hm/"
   },
   "scripts": {
     "test" : "jest"
