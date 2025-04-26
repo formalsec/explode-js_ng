@@ -8,11 +8,13 @@
     "@babel/core": "^7.26.10",
     "@babel/preset-env": "^7.26.9",
     "babel-jest": "^29.7.0",
-    "jest": "^29.7.0"
+    "jest": "^29.7.0",
+    "sleep": "^6.3.0"
   },
   "dependencies": {
     "code-injection": "./code-injection/",
     "command-injection": "./command-injection/",
+    "path-traversal": "./path-traversal/",
     "prototype-pollution": "./prototype-pollution/"
   }
 }
