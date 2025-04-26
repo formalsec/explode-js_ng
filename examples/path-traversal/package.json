@@ -8,7 +8,9 @@
     "GHSA-xpqw-fqpw-35fc": "./GHSA-xpqw-fqpw-35fc/",
     "GHSA-899g-6q6w-7v94": "./GHSA-899g-6q6w-7v94/",
     "GHSA-jpjp-vxv6-59hm": "./GHSA-jpjp-vxv6-59hm/",
-    "GHSA-rrfc-g2gh-xvjm": "./GHSA-rrfc-g2gh-xvjm/"
+    "GHSA-xj6q-9hx8-mm7f": "./GHSA-xj6q-9hx8-mm7f/",
+    "GHSA-52r9-g5g6-2hjp": "./GHSA-52r9-g5g6-2hjp/",
+    "GHSA-vr98-27qj-3c8q": "./GHSA-vr98-27qj-3c8q/"
   },
   "scripts": {
     "test" : "jest"
