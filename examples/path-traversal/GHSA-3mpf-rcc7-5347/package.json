@@ -1,6 +1,9 @@
 {
     "package" : "hono",
     "version" : "4.2.6",
+    "dependencies" : {
+      "hono" : "4.2.6"
+    },
     "advisory": {
         "id": "GHSA-3mpf-rcc7-5347",
         "cwe": "CWE-22"
