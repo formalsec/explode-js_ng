@@ -7,7 +7,7 @@ test("Command Injection in im-metadata", (done) => {
   if (fs.existsSync(path))
     fs.unlinkSync(path);
 
-  file_exist = fs.existsSync(path);
+  var file_exist = fs.existsSync(path);
   expect(file_exist).toBe(false);
   metadata("./foo.jpg;touch im-metadata", { exif: true }, function(
     error,

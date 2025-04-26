@@ -7,15 +7,13 @@ test("Remote code execution for keep-module-latest", (done) => {
 
   var file_exist = fs.existsSync(path);
   expect(file_exist).toBe(false);
-  try {
-    root({ moduleName: "child_process; touch keep-module-latest #" })
-      .catch(() => {})
-      .finally(() => {});
-  } catch (error) { }
 
-  setTimeout(function() {
-    file_exist = fs.existsSync(path);
-    expect(file_exist).toBe(true);
-    fs.unlink(path, (err) => { done(); });
-  }, 3000);
+  root({ registry: "; touch keep-module-latest #", moduleName: "keep-module-latest" })
+    .then(() => { })
+    .catch(() => { })
+    .finally(() => {
+      var file_exist = fs.existsSync(path);
+      expect(file_exist).toBe(true);
+      fs.unlink(path, (err) => { done(); });
+    })
 });
