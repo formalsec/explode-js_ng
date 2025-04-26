@@ -1,6 +1,9 @@
 {
     "package" : "maildev",
     "version" : "2.1.0",
+    "dependencies" : {
+      "maildev" : "2.1.0"
+    },
     "advisory": {
         "id": "GHSA-vc6q-ccj9-9r89",
         "cwe": "CWE-22"
