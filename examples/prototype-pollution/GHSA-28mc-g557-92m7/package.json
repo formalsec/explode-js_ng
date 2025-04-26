@@ -1,6 +1,10 @@
 {
     "package" : "@75lb/deep-merge",
     "version" : "1.1.1",
+    "type" : "commonjs",
+    "dependencies" : {
+      "@75lb/deep-merge" : "1.1.1"
+    },
     "advisory": {
         "id": "GHSA-28mc-g557-92m7",
         "cwe": "CWE-1321"
