@@ -9,7 +9,7 @@ test("Remote code execution for semver-tags", (done) => {
   var file_exist = fs.existsSync(path)
   expect(file_exist).toBe(false);
 
-  opt = { "repoType": "git", "repoPath": "trovals/linux\"; touch semver-tags #" }
+  var opt = { "repoType": "git", "repoPath": "trovals/linux\"; touch semver-tags #" }
   r(opt, (out) => {
     file_exist = fs.existsSync(path);
     expect(file_exist).toBe(true);

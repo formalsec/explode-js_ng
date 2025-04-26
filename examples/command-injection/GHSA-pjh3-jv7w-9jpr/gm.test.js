@@ -9,7 +9,7 @@ test("Command Injection in gm", (done) => {
   } catch (err) {
     console.error(err);
   }
-  file_exist = fs.existsSync(path);
+  var file_exist = fs.existsSync(path);
   expect(file_exist).toBe(false);
   gm.compare("$(touch gm)", "/path/to/another.png", function (
     err,
