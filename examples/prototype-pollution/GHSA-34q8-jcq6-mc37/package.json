@@ -1,6 +1,9 @@
 {
     "package" : "uplot",
     "version" : "1.6.30",
+    "dependencies" : {
+      "uplot" : "1.6.30"
+    },
     "advisory": {
         "id": "GHSA-34q8-jcq6-mc37",
         "cwe": "CWE-1321"

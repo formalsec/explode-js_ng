@@ -1,6 +1,9 @@
 {
     "package" : "web3-utils",
     "version" : "4.2.1-dev.f696e47.0",
+    "dependencies" : {
+      "web3-utils" : "4.2.1-dev.f696e47.0"
+    },
     "advisory": {
         "id": "GHSA-2g4c-8fpm-c46v",
         "cwe": "CWE-1321"

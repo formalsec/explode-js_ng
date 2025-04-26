@@ -1,6 +1,10 @@
 {
     "package" : "@abw/badger-database",
     "version" : "1.2.1",
+    "type": "commonjs",
+    "dependencies" : {
+      "@abw/badger-database" : "1.2.1"
+    },
     "advisory": {
         "id": "GHSA-69r2-2fg7-7hf9",
         "cwe": "CWE-1321"

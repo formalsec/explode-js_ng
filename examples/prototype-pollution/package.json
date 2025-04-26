@@ -1,0 +1,17 @@
+{
+  "name" : "prototype-pollution",
+  "dependencies" : {
+    "GHSA-28mc-g557-92m7" : "./GHSA-28mc-g557-92m7/",
+    "GHSA-2g4c-8fpm-c46v" : "./GHSA-2g4c-8fpm-c46v/",
+    "GHSA-34q8-jcq6-mc37" : "./GHSA-34q8-jcq6-mc37/",
+    "GHSA-3q56-9cc2-46j4" : "./GHSA-3q56-9cc2-46j4/",
+    "GHSA-69r2-2fg7-7hf9" : "./GHSA-69r2-2fg7-7hf9/",
+    "GHSA-79h2-v6hh-wq23" : "./GHSA-79h2-v6hh-wq23/",
+    "GHSA-7qgg-vw88-cc99" : "./GHSA-7qgg-vw88-cc99/",
+    "GHSA-cxm3-284p-qc4v" : "./GHSA-cxm3-284p-qc4v/",
+    "GHSA-f6v4-cf5j-vf3w" : "./GHSA-f6v4-cf5j-vf3w/"
+  },
+  "scripts": {
+    "test" : "jest"
+  }
+}

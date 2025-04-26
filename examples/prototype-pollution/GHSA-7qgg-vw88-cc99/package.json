@@ -1,6 +1,9 @@
 {
     "package" : "utils-extend",
     "version" : "1.0.8",
+    "dependencies" : {
+      "utils-extend" : "1.0.8"
+    },
     "advisory": {
         "id": "GHSA-7qgg-vw88-cc99",
         "cwe": "CWE-1321"
