@@ -1,18 +1,24 @@
 import {GoogleGenAI} from "@google/genai";
 import esprima from "esprima";
-import vm from "node:vm";
 
 import {
-  buildExploitResult,
   buildSyntaxErrorResult,
-  buildRuntimeErrorResult,
-  buildUnsuccessfulRun,
   buildNoCodeResult,
   Result,
 } from "./results";
+
 import {generatePrompt} from "./prompts"
+
 import {Package} from "./package"
 
+import {
+    runInjectionExploit,
+    runPrototypePollutionExploit,
+} from "./exploitRunner"
+
+import {
+    replaceAllRequires,
+} from "./util/replaceRequirePaths"
 const MAX = 10;
 //LLMs 
 interface LLM {
@@ -64,25 +70,21 @@ function validateJS(code: string): { valid: boolean; error?: string } {
   }
 }
 
-function runJS(code: string): { output: string[]; error?: string } {
-  try {
-    const output: string[] = [];
 
-    const sandbox = {
-      console: {
-        log: (msg: any) => output.push(String(msg))
-      }
-    };
+function runJS(pkg: Package, code: string): Result {
+    switch (pkg.getCWE()) {
+        case 'CWE-94': // Code Injection
+        case 'CWE-78': // Command Injection
+            return runInjectionExploit(code);
 
-    const context = vm.createContext(sandbox);
-    const script = new vm.Script(code);
-    script.runInContext(context);
+        case 'CWE-1321': // Prototype Pollution
+            return runPrototypePollutionExploit(code);
 
-    return { output };
-  } catch (err: any) {
-    return { output: [], error: err.message };
-  }
+        default:
+            return buildNoCodeResult(); // or maybe other speficic Result
 }
+
+
 
 
 //Complete answer parsing
@@ -93,43 +95,26 @@ function parseLLMAnswer(txt: string, pkg: Package): Result{
         return buildNoCodeResult();
     } 
 
-    const code = codeBlocks[0]; //Use first code block for now
+    var code = codeBlocks[0]; //Use first code block for now
 
     const syntaxCheck = validateJS(code);
     if (!syntaxCheck.valid) {
         return buildSyntaxErrorResult(syntaxCheck.error ?? "Unknown syntax error");
     }
 
-    const runResult = runJS(code);
+    code = replaceAllRequires(code, pkg.getVulnerableCodePath());
 
-    if (runResult.error) {
-        return buildRuntimeErrorResult(code, runResult.error);
-    }
-
-    const outputStr = runResult.output.join("\n");
-
-    // 
-    // TODO Exploit success verification logic
-    // 
-
-    if (outputStr) {
-        return buildExploitResult(code, outputStr);
-    } else {
-        return buildUnsuccessfulRun(code);
-    }
-    
+    const runResult = runJS(pkg, code);
+        
+    return runResult
 }
 
 
 async function generateExploit(llm: LLM, pkg: Package, mode: string, result?: Result) : Promise<Result> {
     var prompt; 
 
-    if (mode == "source_sink") {
-        prompt = generatePrompt("source-sink",pkg ,result); 
-    } else {
-        prompt = generatePrompt("simple", pkg, result);
-    }
-  
+    prompt = generatePrompt(mode ,pkg ,result); 
+     
     var answer = await llm.ask(prompt); 
   
     var exploit =  parseLLMAnswer(answer, pkg);

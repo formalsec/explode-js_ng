@@ -25,6 +25,10 @@ export class Package {
         return this.cwe;
     }
 
+    getVulnerableCodePath(): string {
+        return this.vulnerableCodePath;
+    } 
+
     getPackageCode(): string {
         try {
             const fullPath = resolve(this.vulnerableCodePath);
