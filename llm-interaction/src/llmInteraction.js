@@ -143,7 +143,18 @@ async function LLMRefinementLoop(llm: LLM, pkg: Package, mode: string): Promise<
 async function main() {
     const llm: LLM = new Gemini20Flash(process.env.GEMINI_KEY || "");
 
-    const pkg = new Package("input", "output", "./vuln.js", "CWE-94");
+    const pkgs: Package[] = [];
+    const modes = ["simple", "source-sink"];
+    
+    for (const mode of modes) {//For each Mode 
+        for (const pkg of pkgs) {//For each Package
+            LLMRefinementLoop(llm, pkg, mode);//Run Loop
+            //Add result saving logic
+        }
+    }
+    
+    //Testing
+    const pkg = new Package("input", "output", "./vuln.js", "CWE-94");//Replace with actual package loading 
 
     const prompt = generatePrompt("simple", pkg);
     console.log(prompt); 
