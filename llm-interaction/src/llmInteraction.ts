@@ -13,6 +13,7 @@ import {Package} from "./package"
 
 import {
     runInjectionExploit,
+    runPathTraversalExploit,
     runPrototypePollutionExploit,
 } from "./exploitRunner"
 
@@ -79,6 +80,9 @@ function runJS(pkg: Package, code: string): Result {
 
         case 'CWE-1321': // Prototype Pollution
             return runPrototypePollutionExploit(code);
+        
+        case 'CWE-22': //Path Traversal
+            return runPathTraversalExploit(code);
 
         default:
             return buildNoCodeResult(); // or maybe other speficic Result
