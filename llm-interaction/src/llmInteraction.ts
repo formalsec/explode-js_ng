@@ -86,6 +86,7 @@ function runJS(pkg: Package, code: string): Result {
 
         default:
             return buildNoCodeResult(); // or maybe other speficic Result
+    }
 }
 
 
