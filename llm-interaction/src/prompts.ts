@@ -21,16 +21,17 @@ function loadPromptTemplate(
   promptType: string,
   baseDir: string = resolve(__dirname, "prompts")
 ): string {
+    console.log(`BaseDir: ${baseDir}`);
   const cweDir = cwe.toLowerCase(); // e.g., "cwe-94"
   const specificPath = resolve(baseDir, cweDir, `${promptType}.prompt.txt`);
   const fallbackPath = resolve(baseDir, `${promptType}.prompt.txt`);
-
+    console.log(`SpecificPath: ${specificPath}`);
   if (existsSync(specificPath)) {
     return readFileSync(specificPath, "utf-8");
   } else if (existsSync(fallbackPath)) {
     return readFileSync(fallbackPath, "utf-8");
   } else {
-    throw new Error(`Prompt template not found for ${cwe}/${promptType}`);
+    throw new Error(`Prompt template not found in ${specificPath}`);
   }
 }
 

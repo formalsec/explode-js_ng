@@ -146,7 +146,7 @@ async function LLMRefinementLoop(llm: LLM, pkg: Package, mode: string): Promise<
 
 
 async function main() {
-    const llm: LLM = new Gemini20Flash(process.env.GEMINI_KEY || "");
+    /*const llm: LLM = new Gemini20Flash(process.env.GEMINI_KEY || "");
 
     const pkgs: Package[] = [];
     const modes = ["simple", "source-sink"];
@@ -156,7 +156,7 @@ async function main() {
             LLMRefinementLoop(llm, pkg, mode);//Run Loop
             //Add result saving logic
         }
-    }
+    }*/
     
     //Testing
     const pkg = new Package("input", "output", "./vuln.js", "CWE-94");//Replace with actual package loading 
@@ -164,8 +164,8 @@ async function main() {
     const prompt = generatePrompt("simple", pkg);
     console.log(prompt); 
 
-    const answer = await llm.ask(prompt);
-    console.log(answer);
+    //const answer = await llm.ask(prompt);
+    //console.log(answer);
 
 }
 
