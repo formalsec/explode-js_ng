@@ -1,5 +1,6 @@
 {
-    "package" : "semver-tags",
+    "id": "GHSA-8h3g-hcwp-6hxq",
+    "name" : "semver-tags",
     "version" : "0.4.10",
     "dependencies" : {
       "semver-tags" : "0.4.10"

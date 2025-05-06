@@ -1,5 +1,6 @@
 {
-    "package" : "mysql2",
+    "id": "GHSA-4rch-2fh8-94vw",
+    "name" : "mysql2",
     "version" : "3.9.6",
     "advisory": {
         "id": "GHSA-4rch-2fh8-94vw",

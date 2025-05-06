@@ -1,5 +1,6 @@
 {
-    "package" : "langchain",
+    "id": "GHSA-hc5w-c9f8-9cc4",
+    "name" : "langchain",
     "version" : "0.2.18",
     "dependencies" : {
       "langchain" : "0.2.18"

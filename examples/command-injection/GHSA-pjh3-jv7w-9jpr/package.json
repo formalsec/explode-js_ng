@@ -1,5 +1,6 @@
 {
-  "package": "gm",
+  "id": "GHSA-pjh3-jv7w-9jpr",
+  "name": "gm",
   "version": "1.20.0",
   "dependencies": {
     "gm": "1.20.0"

@@ -1,5 +1,6 @@
 {
-    "package" : "jsonpath-plus",
+    "id": "GHSA-hw8r-x6gr-5gjp",
+    "name" : "jsonpath-plus",
     "version" : "10.2.0",
     "dependencies" : {
       "jsonpath-plus" : "10.2.0"

@@ -1,5 +1,6 @@
 {
-    "package" : "snyk-php-plugin",
+    "id": "GHSA-69f9-h8f9-7vjf",
+    "name" : "snyk-php-plugin",
     "version" : "1.9.4",
     "dependencies" : {
       "snyk-php-plugin" : "1.9.4"

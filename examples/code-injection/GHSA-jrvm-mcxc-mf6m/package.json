@@ -1,5 +1,6 @@
 {
-    "package" : "dom-iterator",
+    "id": "GHSA-jrvm-mcxc-mf6m",
+    "name" : "dom-iterator",
     "version" : "1.0.0",
     "dependencies": {
       "dom-iterator": "1.0.0",

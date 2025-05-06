@@ -1,5 +1,6 @@
 {
-    "package" : "find-exec",
+    "id": "GHSA-95rp-6gqp-6622",
+    "name" : "find-exec",
     "version" : "1.0.2",
     "dependencies" : {
       "find-exec" : "1.0.2"

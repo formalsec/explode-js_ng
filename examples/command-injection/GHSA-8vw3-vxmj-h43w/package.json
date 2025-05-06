@@ -1,5 +1,6 @@
 {
-    "package" : "bwm-ng",
+    "id": "GHSA-8vw3-vxmj-h43w",
+    "name" : "bwm-ng",
     "version" : "0.1.1",
     "dependencies" : {
       "bwm-ng": "0.1.1"

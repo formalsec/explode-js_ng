@@ -1,5 +1,6 @@
 {
-    "package" : "ggit",
+    "id": "GHSA-62cx-5xj4-wfm4",
+    "name" : "ggit",
     "version" : "2.4.12",
     "dependencies" : {
       "ggit": "2.4.12"

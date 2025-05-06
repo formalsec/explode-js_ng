@@ -1,5 +1,6 @@
 {
-    "package" : "unzip-stream",
+    "id": "GHSA-6jrj-vc65-c983",
+    "name" : "unzip-stream",
     "version" : "0.3.1",
     "dependencies" : {
       "unzip-stream": "0.3.1"
