@@ -15,14 +15,14 @@
         "vulnerability_location": [
             {
                 "source": {
-                    "file": "dist/badger-database.esm.js",
+                    "file": "dist/badger-database.cjs.js",
                     "lineno": 1,
-                    "code": ""
+                    "code": "const setDebug = (options) => {"
                 },
                 "sink": {
-                    "file": "dist/badger-database.esm.js",
+                    "file": "dist/badger-database.cjs.js",
                     "lineno": 1,
-                    "code": ""
+                    "code": "Object.assign(set, value);"
                 }
             }
         ]

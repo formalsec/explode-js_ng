@@ -1,5 +1,6 @@
 {
-    "package" : "pug",
+    "id": "GHSA-3965-hpx2-q597",
+    "name" : "pug",
     "version" : "3.0.2",
     "dependencies": {
       "pug" : "3.0.2",

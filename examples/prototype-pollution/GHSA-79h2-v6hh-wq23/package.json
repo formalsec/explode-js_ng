@@ -1,5 +1,6 @@
 {
-    "package" : "@ndhoule/defaults",
+    "id": "GHSA-79h2-v6hh-wq23",
+    "name" : "@ndhoule/defaults",
     "version" : "2.0.1",
     "dependencies": {
       "@ndhoule/defaults": "2.0.1"

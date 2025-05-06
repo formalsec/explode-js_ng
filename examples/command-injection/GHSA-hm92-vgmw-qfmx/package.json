@@ -1,5 +1,6 @@
 {
-    "package" : "chromedriver",
+    "id": "GHSA-hm92-vgmw-qfmx",
+    "name" : "chromedriver",
     "version" : "119.0.0",
     "dependencies" : {
       "chromedriver": "119.0.0"

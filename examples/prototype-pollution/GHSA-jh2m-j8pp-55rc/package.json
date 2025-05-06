@@ -1,5 +1,6 @@
 {
-  "package" : "gedi",
+  "id": "GHSA-jh2m-j8pp-55rc",
+  "name" : "gedi",
   "version" : "1.6.3",
   "dependencies" : {
     "gedi" : "1.6.3"
@@ -19,52 +20,52 @@
           "file": "modelOperations.js",
           "lineno": 70,
           "code": "function set(path, value, model) {"
+          },
+          "sink": {
+            "file": "modelOperations.js",
+            "lineno": 120,
+            "code": "reference[key] = value;"
+          }
+        }
+    ]
+      },
+      "poc": [
+        {
+          "url": "https://security.snyk.io/vuln/SNYK-JS-GEDI-598803"
+        }
+      ],
+      "patch": [
+        {
+          "url": ""
+        }
+      ],
+      "tools": {
+        "codeql": {
+          "score": "D"
         },
-        "sink": {
-          "file": "modelOperations.js",
-          "lineno": 120,
-          "code": "reference[key] = value;"
+        "njsscan": {
+          "score": "D"
+        },
+        "graudit": {
+          "score": "C"
+        },
+        "insidersec": {
+          "score": "D"
+        },
+        "eslint": {
+          "score": "A"
+        },
+        "msdevskim": {
+          "score": "D"
+        },
+        "drek": {
+          "score": "D"
+        },
+        "mosca": {
+          "score": "C"
+        },
+        "odgen": {
+          "score": "C"
         }
       }
-    ]
-  },
-  "poc": [
-    {
-      "url": "https://security.snyk.io/vuln/SNYK-JS-GEDI-598803"
-    }
-  ],
-  "patch": [
-    {
-      "url": ""
-    }
-  ],
-  "tools": {
-    "codeql": {
-      "score": "D"
-    },
-    "njsscan": {
-      "score": "D"
-    },
-    "graudit": {
-      "score": "C"
-    },
-    "insidersec": {
-      "score": "D"
-    },
-    "eslint": {
-      "score": "A"
-    },
-    "msdevskim": {
-      "score": "D"
-    },
-    "drek": {
-      "score": "D"
-    },
-    "mosca": {
-      "score": "C"
-    },
-    "odgen": {
-      "score": "C"
-    }
   }
-}

@@ -1,5 +1,6 @@
 {
-    "package" : "gettext.js",
+    "id": "GHSA-vwhg-jwr4-vxgg",
+    "name" : "gettext.js",
     "version" : "2.0.2",
     "dependencies" : {
       "gettext.js" : "2.0.2"
@@ -14,14 +15,14 @@
         "vulnerability_location": [
             {
                 "source": {
-                    "file": "TODO",
-                    "lineno": -1,
-                    "code": "TODO"
+                    "file": "lib/gettext.js",
+                    "lineno": 2,
+                    "code": "var i18n = function (options) {"
                 },
                 "sink": {
-                    "file": "TODO",
-                    "lineno": -1,
-                    "code": "TODO"
+                    "file": "lib/gettext.js",
+                    "lineno": 102,
+                    "code": "return new Function(\"n\", 'var plural, nplurals; '+ plural_form +' return { nplurals: nplurals, plural: (plural === true ? 1 : (plural ? plural : 0)) };');"
                 }
             }
         ]

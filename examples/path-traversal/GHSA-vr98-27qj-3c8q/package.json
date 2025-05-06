@@ -1,5 +1,6 @@
 {
-  "package": "rollup-plugin-dev-server",
+  "id": "GHSA-vr98-27qj-3c8q",
+  "name": "rollup-plugin-dev-server",
   "version": "0.4.3",
   "dependencies": {
     "rollup-plugin-dev-server": "0.4.3"
@@ -7,6 +8,24 @@
   "advisory" : {
     "id": "GHSA-vr98-27qj-3c8q",
     "cwe" : "CWE-22"
+  },
+  "correct_cwe": "CWE-22",
+  "correct_package_link": "https://registry.npmjs.org/rollup-plugin-dev-server/-/rollup-plugin-dev-server-0.4.3.tgz",
+  "vulnerability" : {
+    "vulnerability_location" : [
+      {
+        "source" : {
+          "file": "index.cjs.js",
+          "lineno": 120,
+          "code": "function readFileFromContentBase(contentBase, urlPath, callback) {"
+        },
+        "sink": {
+          "file": "index.cjs.js",
+          "lineno": 128,
+          "code": "fs.readFile(filePath, function (error, content) {"
+        }
+      }
+    ]
   },
   "links": {
     "source1": "https://security.snyk.io/vuln/SNYK-JS-ROLLUPPLUGINDEVSERVER-590124",

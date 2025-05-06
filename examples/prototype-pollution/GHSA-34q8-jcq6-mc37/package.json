@@ -1,5 +1,6 @@
 {
-    "package" : "uplot",
+    "id": "GHSA-34q8-jcq6-mc37",
+    "name" : "uplot",
     "version" : "1.6.30",
     "dependencies" : {
       "uplot" : "1.6.30"

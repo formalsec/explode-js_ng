@@ -1,5 +1,6 @@
 {
-  "package" : "im-metadata",
+  "id": "GHSA-qfxv-qqvg-24pg",
+  "name" : "im-metadata",
   "version" : "3.0.1",
   "dependencies" : {
     "im-metadata" : "3.0.1"

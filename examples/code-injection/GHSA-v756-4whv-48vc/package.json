@@ -1,5 +1,6 @@
 {
-  "package" : "cd-messenger",
+  "id": "GHSA-v756-4whv-48vc",
+  "name" : "cd-messenger",
   "version" : "2.7.26",
   "dependencies" : {
     "cd-messenger" : "2.7.26"

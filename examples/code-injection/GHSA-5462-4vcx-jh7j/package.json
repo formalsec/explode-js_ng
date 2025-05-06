@@ -1,5 +1,6 @@
 {
-    "package" : "angular-expressions",
+    "id": "GHSA-5462-4vcx-jh7j",
+    "name" : "angular-expressions",
     "version" : "1.4.2",
     "dependencies" : {
       "angular-expressions" : "1.4.2"
