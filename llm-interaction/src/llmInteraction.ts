@@ -1,5 +1,5 @@
 import {GoogleGenAI} from "@google/genai";
-import esprima from "esprima";
+import * as esprima from 'esprima';
 
 import {
   buildSyntaxErrorResult,
@@ -20,7 +20,7 @@ import {
 import {
     replaceAllRequires,
 } from "./util/replaceRequirePaths"
-const MAX = 10;
+const MAX = 0;
 //LLMs 
 interface LLM {
   ask(prompt: string): Promise<string>;
@@ -109,6 +109,8 @@ function parseLLMAnswer(txt: string, pkg: Package): Result{
 
     code = replaceAllRequires(code, pkg.getVulnerableCodePath());
 
+    console.log("\n====================[ CODE TO RUN ]====================\n");
+    console.log(code);
     const runResult = runJS(pkg, code);
         
     return runResult
@@ -118,9 +120,15 @@ function parseLLMAnswer(txt: string, pkg: Package): Result{
 async function generateExploit(llm: LLM, pkg: Package, mode: string, result?: Result) : Promise<Result> {
     var prompt; 
 
-    prompt = generatePrompt(mode ,pkg ,result); 
-     
+    prompt = generatePrompt(mode ,pkg ,result);
+    console.log("\n====================[ PROMPT ]====================\n");
+    console.log(prompt);
+    
+    console.log("Waiting for LLM answer...")
     var answer = await llm.ask(prompt); 
+    
+    console.log("\n====================[ LLM ANSWER ]====================\n");
+    console.log(answer);
   
     var exploit =  parseLLMAnswer(answer, pkg);
 
@@ -136,6 +144,7 @@ async function LLMRefinementLoop(llm: LLM, pkg: Package, mode: string): Promise<
         if (result.type === "ExploitResult") {
             return result; 
         }
+        cur +=1;
   
     } while (cur < MAX)
   
@@ -146,12 +155,16 @@ async function LLMRefinementLoop(llm: LLM, pkg: Package, mode: string): Promise<
 
 
 async function main() {
-    /*const llm: LLM = new Gemini20Flash(process.env.GEMINI_KEY || "");
+    const llm: LLM = new Gemini20Flash(process.env.GEMINI_KEY || "");
+    const ciPkg = new Package('module.exports = function(){',"exec(command, { stdio: 'ignore' })",'/home/gc/Desktop/MEIC/ano-2/tese/explode-js_ng/llm-interaction/src/vulnerabilities/cwe-78/index.js','CWE-78');
+    const result = await LLMRefinementLoop(llm,ciPkg,"simple");
+    console.log("\n====================[ RESULT ]====================\n");
+    console.log(result);
 
-    const pkgs: Package[] = [];
-    const modes = ["simple", "source-sink"];
+    //const pkgs: Package[] = [];
+    //const modes = ["simple", "source-sink"];
     
-    for (const mode of modes) {//For each Mode 
+    /*for (const mode of modes) {//For each Mode 
         for (const pkg of pkgs) {//For each Package
             LLMRefinementLoop(llm, pkg, mode);//Run Loop
             //Add result saving logic
@@ -159,14 +172,26 @@ async function main() {
     }*/
     
     //Testing
-    const pkg = new Package("input", "output", "./vuln.js", "CWE-94");//Replace with actual package loading 
+    //const pkg = new Package("input", "output", "./vuln.js", "CWE-94");//Replace with actual package loading 
+    /*const pkg = new Package('// source', '// sink', '', 'CWE-94');
 
-    const prompt = generatePrompt("simple", pkg);
-    console.log(prompt); 
-
+    //const prompt = generatePrompt("simple", pkg);
+    //console.log(prompt); 
+    
+    const result = parseLLMAnswer('```js\nfunction ()\n```', pkg);
+    console.log(result);*/
     //const answer = await llm.ask(prompt);
     //console.log(answer);
 
 }
 
-main();
+if (require.main === module) {
+  main();
+}
+
+if (process.env.NODE_ENV === 'test') {
+    // Add anything else you want to test internally here too
+    (module.exports as any).extractJSCodeBlocks = extractJSCodeBlocks;
+    (module.exports as any).validateJS = validateJS;
+    (module.exports as any).parseLLMAnswer = parseLLMAnswer;
+}

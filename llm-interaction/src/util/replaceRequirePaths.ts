@@ -1,5 +1,5 @@
 // src/replaceRequirePaths.ts
-import esprima from "esprima";
+import * as esprima from 'esprima';
 import estraverse from "estraverse";
 import escodegen from "escodegen";
 import { nodeBuiltins } from "./builtins";
