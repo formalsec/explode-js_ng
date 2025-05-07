@@ -1,7 +1,12 @@
 import { readFileSync, existsSync } from "fs";
 import { resolve } from "path";
 import { Package } from "./package";
-import { Result } from "./results";
+import { 
+    Result, 
+    SyntaxErrorResult, 
+    RuntimeErrorResult, 
+    UnsuccessfulRunResult,  
+} from "./results";
 
 /**
  * Replace <placeholders> in template with actual values from vars.
@@ -35,6 +40,28 @@ function loadPromptTemplate(
   }
 }
 
+function getResultSummary(result: Result): string {
+    switch (result.type) {
+    case "SyntaxErrorResult": {
+      const r = result as SyntaxErrorResult;
+      return `SyntaxError:\nConsidering also the exploit code:\n${r.code}\nthat resulted in a SyntaxError:\n${r.errorMessage}`;
+    }
+    case "RuntimeErrorResult": {
+      const r = result as RuntimeErrorResult;
+      return `RuntimeError:\nConsidering also the exploit code:\n${r.code}\nthat resulted in a RuntimeError:\n${r.errorMessage}`;
+    }
+    case "UnsuccessfulRunResult": {
+      const r = result as UnsuccessfulRunResult;
+      return `Unsuccessful Run:\nConsidering also the exploit code:\n${r.code}\nthat did not succeed in triggering the vulnerability.`;
+    }
+    case "NoCodeResult": {
+        return ``;
+    }
+    default:
+      return "No summary available for this result type.";
+  }
+}
+
 /**
  * Generates a prompt using a CWE + promptType + Package + optional Result.
  */
@@ -50,7 +77,7 @@ export function generatePrompt(
     source: pkg.getSource(),
     sink: pkg.getSink(),
     cwe: pkg.getCWE(),
-    resultSummary: result ? JSON.stringify(result, null, 2) : ""
+    resultSummary: result ? getResultSummary(result) : ""
   });
 }
 

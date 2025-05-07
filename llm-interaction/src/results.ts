@@ -26,6 +26,7 @@ export class ExploitResult extends Result {
 
 export class SyntaxErrorResult extends Result {
   constructor(
+    public code: string,
     public errorMessage: string
   ) {
     super(ResultType.SyntaxError);
@@ -62,8 +63,8 @@ export function buildExploitResult(code: string, output: string): ExploitResult 
   return new ExploitResult(code, output);
 }
 
-export function buildSyntaxErrorResult(errorMessage: string): SyntaxErrorResult {
-  return new SyntaxErrorResult(errorMessage);
+export function buildSyntaxErrorResult(code:string, errorMessage: string): SyntaxErrorResult {
+  return new SyntaxErrorResult(code, errorMessage);
 }
 
 export function buildRuntimeErrorResult(code: string, errorMessage: string): RuntimeErrorResult {

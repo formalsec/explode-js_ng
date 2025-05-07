@@ -1,6 +1,9 @@
 import {GoogleGenAI} from "@google/genai";
 import * as esprima from 'esprima';
 
+import { writeFile } from 'fs/promises';
+import { join } from 'path';
+
 import {
   buildSyntaxErrorResult,
   buildNoCodeResult,
@@ -20,16 +23,19 @@ import {
 import {
     replaceAllRequires,
 } from "./util/replaceRequirePaths"
-const MAX = 0;
+//const MAX = 0;
 //LLMs 
 interface LLM {
   ask(prompt: string): Promise<string>;
+  getName(): string; 
 }
 
 class Gemini20Flash implements LLM {
     private client:  GoogleGenAI;
+    private name: string;
     constructor(apiKey:string) {
         this.client = new GoogleGenAI({apiKey: apiKey});
+        this.name = "Gemini20Flash"
     }
 
   async ask(prompt: string): Promise<string> {
@@ -44,9 +50,19 @@ class Gemini20Flash implements LLM {
       return "ERROR: API Error";
     }
   }
+  getName(): string {
+      return this.name;
+  }
 }
 
-
+//Refinement Options
+interface RefinementOptions {
+  packages: Package[];
+  llms: LLM[];
+  modes: string[];
+  maxIterations: number;
+  timeoutMs?: number;
+}
 
 // LLM response parsing
 function extractJSCodeBlocks(text: string): string[] {
@@ -104,13 +120,13 @@ function parseLLMAnswer(txt: string, pkg: Package): Result{
 
     const syntaxCheck = validateJS(code);
     if (!syntaxCheck.valid) {
-        return buildSyntaxErrorResult(syntaxCheck.error ?? "Unknown syntax error");
+        return buildSyntaxErrorResult(code ,syntaxCheck.error ?? "Unknown syntax error");
     }
 
     code = replaceAllRequires(code, pkg.getVulnerableCodePath());
 
-    console.log("\n====================[ CODE TO RUN ]====================\n");
-    console.log(code);
+    //console.log("\n====================[ CODE TO RUN ]====================\n");
+    //console.log(code);
     const runResult = runJS(pkg, code);
         
     return runResult
@@ -121,45 +137,104 @@ async function generateExploit(llm: LLM, pkg: Package, mode: string, result?: Re
     var prompt; 
 
     prompt = generatePrompt(mode ,pkg ,result);
-    console.log("\n====================[ PROMPT ]====================\n");
-    console.log(prompt);
+    //console.log("\n====================[ PROMPT ]====================\n");
+    //console.log(prompt);
     
-    console.log("Waiting for LLM answer...")
+    //console.log("Waiting for LLM answer...")
     var answer = await llm.ask(prompt); 
     
-    console.log("\n====================[ LLM ANSWER ]====================\n");
-    console.log(answer);
+    //console.log("\n====================[ LLM ANSWER ]====================\n");
+    //console.log(answer);
   
     var exploit =  parseLLMAnswer(answer, pkg);
 
     return exploit;
 }
 
-async function LLMRefinementLoop(llm: LLM, pkg: Package, mode: string): Promise<Result> {
+async function LLMRefinementLoop(
+    llm: LLM, 
+    pkg: Package, 
+    mode: string, 
+    maxIterations: number, 
+    timeout?: number
+    ): Promise<Result> {
     let result: Result | undefined; 
     let cur = 0;
-    
-    do {
-        result = await generateExploit(llm, pkg, mode, result); 
-        if (result.type === "ExploitResult") {
-            return result; 
+
+    const timeoutFallback = (ms: number): Promise<"timeout"> =>
+        new Promise(resolve => setTimeout(() => resolve("timeout"), ms)
+    );
+
+    do { 
+        //If timeout is provided
+        if(timeout) {  
+            const resultOrTimeout = await Promise.race([
+                generateExploit(llm, pkg, mode, result),
+                timeoutFallback(timeout)
+            ]);
+        
+            if (resultOrTimeout === "timeout") {
+                continue;
+            }
+            //If it does not time out assign the return value to result
+            result = resultOrTimeout;
+        }else {//no timeout provided
+            result = await generateExploit(llm, pkg, mode, result);
         }
+         
+        if (result.type === "ExploitResult") {
+            return result;
+        }
+           
         cur +=1;
   
-    } while (cur < MAX)
-  
+    } while (cur < maxIterations)
+
+    if (result === undefined) {
+        result = buildNoCodeResult();
+    }
     return result // for now return result of last try maybe create a new Result type to return here
 }
 
+
+export async function runLLMRefinementBatch({
+  packages,
+  llms,
+  modes,
+  maxIterations,
+  timeoutMs,
+}: RefinementOptions): Promise<void> {
+    //For each Package
+    for (const pkg of packages) {
+        //For each LLM
+        for (const llm of llms) {
+            //For each Mode
+            for (const mode of modes) {
+                //Run RefinmentLoop and save results to json
+                try {
+                    const result = await LLMRefinementLoop(llm, pkg, mode, maxIterations, timeoutMs);
+
+                    const filename = `${llm.getName()}-${mode}-iteration${maxIterations}.json`;
+                    const filePath = join(pkg.getVulnerableCodePath(), filename);
+        
+                    await writeFile(filePath, JSON.stringify(result, null, 2), 'utf-8');
+                    console.log(`Saved result to ${filePath}`);
+                } catch (err) {
+                    console.error(`Error for ${pkg.getVulnerableCodePath} [${llm.getName}, ${mode}]:`, err);
+                }
+            }
+        }
+    }
+}
 
 
 
 async function main() {
     const llm: LLM = new Gemini20Flash(process.env.GEMINI_KEY || "");
     const ciPkg = new Package('module.exports = function(){',"exec(command, { stdio: 'ignore' })",'/home/gc/Desktop/MEIC/ano-2/tese/explode-js_ng/llm-interaction/src/vulnerabilities/cwe-78/index.js','CWE-78');
-    const result = await LLMRefinementLoop(llm,ciPkg,"simple");
-    console.log("\n====================[ RESULT ]====================\n");
-    console.log(result);
+    //const result = await LLMRefinementLoop(llm,ciPkg,"simple");
+    //console.log("\n====================[ RESULT ]====================\n");
+    //console.log(result);
 
     //const pkgs: Package[] = [];
     //const modes = ["simple", "source-sink"];
