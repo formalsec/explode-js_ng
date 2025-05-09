@@ -20,9 +20,11 @@ import {
     runPrototypePollutionExploit,
 } from "./exploitRunner"
 
-import {
-    replaceAllRequires,
-} from "./util/replaceRequirePaths"
+//Utils
+import {replaceAllRequires} from "./util/replaceRequirePaths"
+import {killProcessGroups} from "./util/killProcessGroups"
+import {loadPackagesFromVulnerabilities} from "./util/loadPackages"
+
 //const MAX = 0;
 //LLMs 
 interface LLM {
@@ -207,11 +209,14 @@ export async function runLLMRefinementBatch({
     //For each Package
     for (const pkg of packages) {
         //For each LLM
+        const setUpProcesses: number[]= pkg.runSetup();//Run necessary setup
         for (const llm of llms) {
             //For each Mode
             for (const mode of modes) {
                 //Run RefinmentLoop and save results to json
                 try {
+                    
+
                     const result = await LLMRefinementLoop(llm, pkg, mode, maxIterations, timeoutMs);
 
                     const filename = `${llm.getName()}-${mode}-iteration${maxIterations}.json`;
@@ -219,44 +224,41 @@ export async function runLLMRefinementBatch({
         
                     await writeFile(filePath, JSON.stringify(result, null, 2), 'utf-8');
                     console.log(`Saved result to ${filePath}`);
+
+                                            
                 } catch (err) {
                     console.error(`Error for ${pkg.getVulnerableCodePath} [${llm.getName}, ${mode}]:`, err);
                 }
             }
         }
+        killProcessGroups(setUpProcesses); // kill background processes
     }
 }
 
 
 
 async function main() {
-    const llm: LLM = new Gemini20Flash(process.env.GEMINI_KEY || "");
+    const gemini: LLM = new Gemini20Flash(process.env.GEMINI_KEY || "");
     const ciPkg = new Package('module.exports = function(){',"exec(command, { stdio: 'ignore' })",'/home/gc/Desktop/MEIC/ano-2/tese/explode-js_ng/llm-interaction/src/vulnerabilities/cwe-78/index.js','CWE-78');
-    //const result = await LLMRefinementLoop(llm,ciPkg,"simple");
-    //console.log("\n====================[ RESULT ]====================\n");
-    //console.log(result);
+    
+    const packages: Package[] = loadPackagesFromVulnerabilities("./vulnerabilities");
+    const maxIterationsList: number[] = [1, 5, 10, 20];
+    const modes: string[] = ["simple", "source-sink"];
+    const llms: LLM[] = [gemini];
+    
+    
+    //Run Experiences
+    for (const max of maxIterationsList) {
 
-    //const pkgs: Package[] = [];
-    //const modes = ["simple", "source-sink"];
-    
-    /*for (const mode of modes) {//For each Mode 
-        for (const pkg of pkgs) {//For each Package
-            LLMRefinementLoop(llm, pkg, mode);//Run Loop
-            //Add result saving logic
-        }
-    }*/
-    
-    //Testing
-    //const pkg = new Package("input", "output", "./vuln.js", "CWE-94");//Replace with actual package loading 
-    /*const pkg = new Package('// source', '// sink', '', 'CWE-94');
+        const options: RefinementOptions = {
+            packages,
+            llms,
+            modes,
+            maxIterations: max,
+        };
 
-    //const prompt = generatePrompt("simple", pkg);
-    //console.log(prompt); 
-    
-    const result = parseLLMAnswer('```js\nfunction ()\n```', pkg);
-    console.log(result);*/
-    //const answer = await llm.ask(prompt);
-    //console.log(answer);
+        runLLMRefinementBatch(options);
+    }
 
 }
 
