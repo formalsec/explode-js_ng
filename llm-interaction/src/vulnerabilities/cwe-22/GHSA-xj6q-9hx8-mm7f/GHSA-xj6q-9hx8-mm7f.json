@@ -1,0 +1,40 @@
+{
+  "id" : "GHSA-xj6q-9hx8-mm7f",
+  "name": "liuyaserver",
+  "version": "1.0.0",
+  "dependencies": {
+    "liuyaserver": "1.0.0"
+  },
+  "advisory" : {
+    "id" : "GHSA-xj6q-9hx8-mm7f",
+    "cwe" : "CWE-22"
+  },
+  "setup":[
+      "node /home/gc/Desktop/MEIC/ano-2/tese/explode-js_ng/llm-interaction/src/vulnerabilities/cwe-22/GHSA-xj6q-9hx8-mm7f/package/node.js&"
+    ],
+  "correct_cwe": "CWE-22",
+  "correct_package_link": "https://registry.npmjs.org/liuyaserver/-/liuyaserver-1.0.0.tgz",
+  "vulnerability" : {
+    "vulnerability_location" : [
+      {
+        "source" : {
+          "file": "node.js",
+          "lineno": 4,
+          "code": "http.createServer(function (request,response) {"
+        },
+        "sink": {
+          "file": "node.js",
+          "lineno": 7,
+          "code": "fs.readFile(path,function (error,file) {"
+        }
+      }
+    ]
+  },
+  "links": {
+    "source1": "https://security.snyk.io/vuln/npm:liuyaserver:20170521",
+    "source2": "https://github.com/advisories/GHSA-xj6q-9hx8-mm7f"
+  },
+  "fixedVersion": "n/a",
+  "fixCommit": "n/a",
+  "sink": "node.js:7:8"
+}

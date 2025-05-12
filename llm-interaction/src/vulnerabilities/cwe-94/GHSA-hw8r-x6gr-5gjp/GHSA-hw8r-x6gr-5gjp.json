@@ -1,0 +1,74 @@
+{
+    "id": "GHSA-hw8r-x6gr-5gjp",
+    "name" : "jsonpath-plus",
+    "version" : "10.2.0",
+    "dependencies" : {
+      "jsonpath-plus" : "10.2.0"
+    },
+    "advisory": {
+        "id": "GHSA-hw8r-x6gr-5gjp",
+        "cwe": "CWE-94"
+    },
+    "correct_cwe": "CWE-94",
+    "correct_package_link": "https://registry.npmjs.org/jsonpath-plus/-/jsonpath-plus-10.2.0.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "src/Safe-Script.js",
+                    "lineno": 191,
+                    "code": "return SafeEval.evalAst(this.ast, keyMap);"
+                },
+                "sink": {
+                    "file": "src/Safe-Script.js",
+                    "lineno": 132,
+                    "code": "const result = obj[prop];"
+                }
+            }]
+    },
+    "poc": [
+        {
+            "url": "https://security.snyk.io/vuln/SNYK-JS-JSONPATHPLUS-8719585"
+        },
+        {
+            "url": "https://security.snyk.io/vuln/SNYK-JS-JSONPATHPLUS-7945884"
+        },
+        {
+            "url": "https://github.com/JSONPath-Plus/JSONPath/issues/226"
+        }
+    ],
+    "patch": [
+        {
+            "url": "https://github.com/JSONPath-Plus/JSONPath/commit/30942896d27cb8a806b965a5ca9ef9f686be24ee#diff-20335980a6d52fc684b014099a5eae67e62b62503427e16d582d5ec7c549aa8b"
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
+}

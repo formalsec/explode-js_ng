@@ -1,0 +1,20 @@
+{
+  "name": "open-device",
+  "version": "4.0.1",
+  "description": "Creates a terminal web interface for any device.",
+  "main": "broadcast.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "broadcast",
+    "open",
+    "device"
+  ],
+  "bin": {
+    "unlock": "broadcast.js"
+  },
+  "author": "Alec Menke",
+  "license": "ISC",
+  "preferGlobal": "true"
+}

@@ -30,6 +30,7 @@ export class Package {
     }
 
     getVulnerableCodePath(): string {
+       // console.log(`Code Path: ${this.vulnerableCodePath}`);
         return this.vulnerableCodePath;
     } 
 

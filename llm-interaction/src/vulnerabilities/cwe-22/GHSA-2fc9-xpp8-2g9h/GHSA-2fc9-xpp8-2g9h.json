@@ -1,0 +1,62 @@
+{
+    "advisory": {
+        "id": "GHSA-2fc9-xpp8-2g9h",
+        "cwe": "CWE-22"
+    },
+    "correct_cwe": "CWE-22",
+    "correct_package_link": "https://registry.npmjs.org/@backstage/backend-common/-/backend-common-0.21.0.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "dist/cjs/paths-cfcd05fc.cjs.js",
+                    "lineno": 19,
+                    "code": "function resolveSafeChildPath(base, path) {"
+                },
+                "sink": {
+                    "file": "dist/cjs/paths-cfcd05fc.cjs.js",
+                    "lineno": 26,
+                    "code": "return targetPath;"
+                }
+            }]
+    },
+    "poc": [
+        {
+            "url": ""
+        }
+    ],
+    "patch": [
+        {
+            "url": "https://github.com/backstage/backstage/commit/1ad2b1b61ebb430051f7d804b0cc7ebfe7922b6f"
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
+}

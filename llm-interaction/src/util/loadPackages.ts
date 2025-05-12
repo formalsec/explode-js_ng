@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "fs";
+import { readdirSync, readFileSync, realpathSync } from "fs";
 import { join, extname } from "path";
 import { Package } from "../package"; // Adjust the import path if needed
 
@@ -17,8 +17,8 @@ export function loadPackagesFromVulnerabilities(vulnerabilitiesDir: string): Pac
         for (const packageDir of packageDirs) {
             const pkgPath = join(cwePath, packageDir.name);
             const files = readdirSync(pkgPath);
-
-            const jsonFile = files.find(f => f.endsWith(".json"));
+           // console.log(packageDir.name);
+            const jsonFile = files.find(f => f.endsWith(".json") && f.startsWith(packageDir.name));
             const sliceFile = files.find(f => supportedExtensions.includes(extname(f)) && f.startsWith("vulnerable_slice"));
             if (!jsonFile || !sliceFile) continue;
 
@@ -30,11 +30,14 @@ export function loadPackagesFromVulnerabilities(vulnerabilitiesDir: string): Pac
 
             const sourceCode = locations[0].source?.code || "";
             const sinkCode = locations[0].sink?.code || "";
-            const vulnerableCodePath = join(pkgPath, sliceFile);
+
+            const vulnerableCodePath = realpathSync(join(pkgPath, sliceFile)); // <-- resolved real path
+            //console.log(`Load Packages Code Path: ${vulnerableCodePath}`);
             const cwe = jsonData.correct_cwe || jsonData.advisory?.cwe || "";
 
-            // Optional: load setup array if present in the JSON
-            const setup = Array.isArray(jsonData.setup) ? jsonData.setup.filter(s => typeof s === "string") : [];
+            const setup = Array.isArray(jsonData.setup)
+                ? (jsonData.setup as unknown[]).filter((s): s is string => typeof s === "string")
+                : [];
 
             const pkg = new Package(sourceCode, sinkCode, vulnerableCodePath, cwe, setup);
             packages.push(pkg);
@@ -43,4 +46,3 @@ export function loadPackagesFromVulnerabilities(vulnerabilitiesDir: string): Pac
 
     return packages;
 }
-

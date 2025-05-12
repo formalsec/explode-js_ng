@@ -1,0 +1,62 @@
+{
+    "advisory": {
+        "id": "GHSA-wxrx-pc44-rcgc",
+        "cwe": "CWE-78"
+    },
+    "correct_cwe": "CWE-78",
+    "correct_package_link": "https://registry.npmjs.org/keep-module-latest/-/keep-module-latest-1.0.1.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "index.js",
+                    "lineno": 9,
+                    "code": "module.exports = ({"
+                },
+                "sink": {
+                    "file": "index.js",
+                    "lineno": 50,
+                    "code": "cp.execSync(`npm install --registry ${registry} ${moduleName}@latest`, {cwd, stdio: 'inherit'})"
+                }
+            }]
+    },
+    "poc": [
+        {
+            "url": "https://security.snyk.io/vuln/SNYK-JS-KEEPMODULELATEST-3157165"
+        }
+    ],
+    "patch": [
+        {
+            "url": ""
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
+}

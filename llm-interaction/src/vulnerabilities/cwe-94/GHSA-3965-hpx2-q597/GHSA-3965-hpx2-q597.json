@@ -1,0 +1,94 @@
+{
+    "id": "GHSA-3965-hpx2-q597",
+    "name" : "pug",
+    "version" : "3.0.2",
+    "dependencies": {
+      "pug" : "3.0.2",
+      "pug-code-gen" : "3.0.2"
+    },
+    "advisory": {
+        "id": "GHSA-3965-hpx2-q597",
+        "cwe": "CWE-94"
+    },
+    "correct_cwe": "CWE-94",
+    "correct_package_link": "https://registry.npmjs.org/pug/-/pug-3.0.2.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "lib/index.js",
+                    "lineno": 313,
+                    "code": "exports.compileClientWithDependenciesTracked = function(str, options) {"
+                },
+                "sink": {
+                    "file": "lib/index.js",
+                    "lineno": 199,
+                    "code": "var js = (findReplacementFunc(plugins, 'generateCode') || generateCode)(ast, {"
+                }
+            },
+            {
+                "source": {
+                    "file": "lib/index.js",
+                    "lineno": 362,
+                    "code": "exports.compileClient = function(str, options) {"
+                },
+                "sink": {
+                    "file": "lib/index.js",
+                    "lineno": 199,
+                    "code": "var js = (findReplacementFunc(plugins, 'generateCode') || generateCode)(ast, {"
+                }
+            },
+            {
+                "source": {
+                    "file": "lib/index.js",
+                    "lineno": 466,
+                    "code": "exports.compileFileClient = function(path, options) {"
+                },
+                "sink": {
+                    "file": "lib/index.js",
+                    "lineno": 199,
+                    "code": "var js = (findReplacementFunc(plugins, 'generateCode') || generateCode)(ast, {"
+                }
+            }
+        ]
+    },
+    "poc": [
+        {
+            "url": "https://github.com/pugjs/pug/pull/3428"
+        }
+    ],
+    "patch": [
+        {
+            "url": "https://github.com/pugjs/pug/commit/32acfe8f197dc44c54e8af32c7d7b19aa9d350fb"
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
+}

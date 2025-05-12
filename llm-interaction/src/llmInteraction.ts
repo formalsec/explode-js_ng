@@ -1,8 +1,8 @@
 import {GoogleGenAI} from "@google/genai";
 import * as esprima from 'esprima';
 
-import { writeFile } from 'fs/promises';
-import { join } from 'path';
+import { writeFile, mkdir } from 'fs/promises';
+import { join, dirname } from 'path';
 
 import {
   buildSyntaxErrorResult,
@@ -214,14 +214,26 @@ export async function runLLMRefinementBatch({
             //For each Mode
             for (const mode of modes) {
                 //Run RefinmentLoop and save results to json
+                const codePath = pkg.getVulnerableCodePath();
+                const ghsaDir = codePath.split("/").find(part => part.startsWith("GHSA")) || "GHSA-UNKNOWN";
+
+                console.log(`📦 GHSA ID     : ${ghsaDir}`); 
+                console.log(`🤖 LLM Name    : ${llm.getName()}`);
+                console.log(`🛠️  Mode       : ${mode}`);
                 try {
                     
 
                     const result = await LLMRefinementLoop(llm, pkg, mode, maxIterations, timeoutMs);
 
                     const filename = `${llm.getName()}-${mode}-iteration${maxIterations}.json`;
-                    const filePath = join(pkg.getVulnerableCodePath(), filename);
-        
+
+                    const resultsDir = join(dirname(pkg.getVulnerableCodePath()), 'results');
+
+                    // Create the directory if it doesn't exist
+                    await mkdir(resultsDir, { recursive: true });  // <== this must run before writeFile
+                                
+                    const filePath = join(resultsDir, filename);
+
                     await writeFile(filePath, JSON.stringify(result, null, 2), 'utf-8');
                     console.log(`Saved result to ${filePath}`);
 
@@ -239,10 +251,10 @@ export async function runLLMRefinementBatch({
 
 async function main() {
     const gemini: LLM = new Gemini20Flash(process.env.GEMINI_KEY || "");
-    const ciPkg = new Package('module.exports = function(){',"exec(command, { stdio: 'ignore' })",'/home/gc/Desktop/MEIC/ano-2/tese/explode-js_ng/llm-interaction/src/vulnerabilities/cwe-78/index.js','CWE-78');
+   //const ciPkg = new Package('module.exports = function(){',"exec(command, { stdio: 'ignore' })",'/home/gc/Desktop/MEIC/ano-2/tese/explode-js_ng/llm-interaction/src/vulnerabilities/cwe-78/index.js','CWE-78');
     
     const packages: Package[] = loadPackagesFromVulnerabilities("./vulnerabilities");
-    const maxIterationsList: number[] = [1, 5, 10, 20];
+    const maxIterationsList: number[] = [/*1,*/ 5/*, 10, 20*/];
     const modes: string[] = ["simple", "source-sink"];
     const llms: LLM[] = [gemini];
     

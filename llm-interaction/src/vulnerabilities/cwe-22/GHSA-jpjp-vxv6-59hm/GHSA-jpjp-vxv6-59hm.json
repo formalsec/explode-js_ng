@@ -1,0 +1,40 @@
+{
+  "id": "GHSA-jpjp-vxv6-59hm",
+  "name" : "open-device",
+  "setup": [
+      "node /home/gc/Desktop/MEIC/ano-2/tese/explode-js_ng/llm-interaction/src/vulnerabilities/cwe-22/GHSA-jpjp-vxv6-59hm/package/broadcast.js&"
+  ],
+  "version" : "4.0.1",
+  "dependencies": {
+    "open-device": "4.0.1"
+  },
+  "advisory" : {
+    "id": "GHSA-jpjp-vxv6-59hm",
+    "cwe" : "CWE-22"
+  },
+  "correct_cwe": "CWE-22",
+  "correct_package_link": "https://registry.npmjs.org/open-device/-/open-device-4.0.1.tgz",
+  "vulnerability" : {
+    "vulnerability_location" : [
+      {
+        "source" : {
+          "file": "broadcast.js",
+          "lineno": 18,
+          "code": "server.use(require(\"./lib/server-accessible\")(publicFolder));"
+        },
+        "sink": {
+          "file": "lib/server-accessible.js",
+          "lineno": 14,
+          "code": "fs.readFile(filePath, function(error, data){"
+        }
+      }
+    ]
+  },
+  "links": {
+    "source1": "https://security.snyk.io/vuln/npm:open-device:20170430",
+    "source2": "https://github.com/advisories/GHSA-jpjp-vxv6-59hm"
+  },
+  "fixedVersion": "n/a",
+  "fixCommit": "n/a",
+  "sink": "lib/server-accessible.js:14:12"
+}

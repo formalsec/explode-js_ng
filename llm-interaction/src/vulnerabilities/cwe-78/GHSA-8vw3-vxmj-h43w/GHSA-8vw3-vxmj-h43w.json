@@ -1,0 +1,62 @@
+{
+    "advisory": {
+        "id": "GHSA-8vw3-vxmj-h43w",
+        "cwe": "CWE-78"
+    },
+    "correct_cwe": "CWE-78",
+    "correct_package_link": "https://registry.npmjs.org/bwm-ng/-/bwm-ng-0.1.1.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "bwm-ng.js",
+                    "lineno": 9,
+                    "code": "function check(callback, interfaces) {"
+                },
+                "sink": {
+                    "file": "bwm-ng.js",
+                    "lineno": 17,
+                    "code": " exec(\"bwm-ng -c 1 -I \" + interfaces.join(',') + \" -o csv -T avg\", function(error, stdout, stderr) {"
+                }
+            }]
+    },
+    "poc": [
+        {
+            "url": "https://security.snyk.io/vuln/SNYK-JS-BWMNG-3175876"
+        }
+    ],
+    "patch": [
+        {
+            "url": ""
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
+}

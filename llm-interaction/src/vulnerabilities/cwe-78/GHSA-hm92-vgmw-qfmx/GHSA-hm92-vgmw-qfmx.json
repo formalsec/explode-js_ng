@@ -1,0 +1,62 @@
+{
+    "advisory": {
+        "id": "GHSA-hm92-vgmw-qfmx",
+        "cwe": "CWE-78"
+    },
+    "correct_cwe": "CWE-78",
+    "correct_package_link": "https://registry.npmjs.org/chromedriver/-/chromedriver-119.0.0.tgz",
+    "vulnerability": {
+        "vulnerability_location": [
+            {
+                "source": {
+                    "file": "lib/chromedriver.js",
+                    "lineno": 21,
+                    "code": "exports.start = function (args, returnPromise) {"
+                },
+                "sink": {
+                    "file": "lib/chromedriver.js",
+                    "lineno": 28,
+                    "code": "const cp = require('child_process').spawn(command, args);"
+                }
+            }]
+    },
+    "poc": [
+        {
+            "url": "https://gist.github.com/mcoimbra/47b1da554a80795c45126d51e41b2b18"
+        }
+    ],
+    "patch": [
+        {
+            "url": "https://github.com/giggio/node-chromedriver/commit/de961e34e023afcf4fa5c0faeeec69aaa6c3c815"
+        }
+    ],
+    "tools": {
+        "codeql": {
+            "score": ""
+        },
+        "njsscan": {
+            "score": ""
+        },
+        "graudit": {
+            "score": ""
+        },
+        "insidersec": {
+            "score": ""
+        },
+        "eslint": {
+            "score": ""
+        },
+        "appinspector": {
+            "score": ""
+        },
+        "msdevskim": {
+            "score": ""
+        },
+        "drek": {
+            "score": ""
+        },
+        "mosca": {
+            "score": ""
+        }
+    }
+}
