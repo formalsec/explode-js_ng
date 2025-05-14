@@ -1,5 +1,5 @@
 Considering the following code vulnerable to Command Injection <cwe>
 <code>
-Create an example of an exploit that writes to a file in the current directory
+Create an example of an exploit that writes to a .txt file in the current directory
 <resultSummary>
 The exploit code should be self contained in the first code block of the response with no other code in it, do not include the vulnerable code in the exploit code

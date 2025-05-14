@@ -32,7 +32,7 @@ export function loadPackagesFromVulnerabilities(vulnerabilitiesDir: string): Pac
             const sinkCode = locations[0].sink?.code || "";
 
             const vulnerableCodePath = realpathSync(join(pkgPath, sliceFile)); // <-- resolved real path
-            //console.log(`Load Packages Code Path: ${vulnerableCodePath}`);
+            console.log(`Load Packages Code Path: ${vulnerableCodePath}`);
             const cwe = jsonData.correct_cwe || jsonData.advisory?.cwe || "";
 
             const setup = Array.isArray(jsonData.setup)

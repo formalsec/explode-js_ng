@@ -8,6 +8,7 @@ import {
   buildSyntaxErrorResult,
   buildNoCodeResult,
   Result,
+  buildRuntimeErrorResult,
 } from "./results";
 
 import {generatePrompt} from "./prompts"
@@ -129,11 +130,19 @@ function parseLLMAnswer(txt: string, pkg: Package): Result{
 
     //console.log("\n====================[ CODE TO RUN ]====================\n");
     //console.log(code);
-    const runResult = runJS(pkg, code);
+    var runResult;
+    try{
+        runResult = runJS(pkg, code);
+    }catch(err){
+        return buildRuntimeErrorResult("","runJS failed to execute due to Runtime Error");
+    }
         
     return runResult
 }
 
+function sleep(ms:number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 async function generateExploit(llm: LLM, pkg: Package, mode: string, result?: Result) : Promise<Result> {
     var prompt; 
@@ -143,7 +152,8 @@ async function generateExploit(llm: LLM, pkg: Package, mode: string, result?: Re
     //console.log(prompt);
     
     //console.log("Waiting for LLM answer...")
-    var answer = await llm.ask(prompt); 
+    var answer = await llm.ask(prompt);
+    await sleep(4000);
     
     //console.log("\n====================[ LLM ANSWER ]====================\n");
     //console.log(answer);
@@ -254,7 +264,7 @@ async function main() {
    //const ciPkg = new Package('module.exports = function(){',"exec(command, { stdio: 'ignore' })",'/home/gc/Desktop/MEIC/ano-2/tese/explode-js_ng/llm-interaction/src/vulnerabilities/cwe-78/index.js','CWE-78');
     
     const packages: Package[] = loadPackagesFromVulnerabilities("./vulnerabilities");
-    const maxIterationsList: number[] = [/*1,*/ 5/*, 10, 20*/];
+    const maxIterationsList: number[] = [1]/*[1, 5, 10, 20]*/;
     const modes: string[] = ["simple", "source-sink"];
     const llms: LLM[] = [gemini];
     
@@ -279,7 +289,6 @@ if (require.main === module) {
 }
 
 if (process.env.NODE_ENV === 'test') {
-    // Add anything else you want to test internally here too
     (module.exports as any).extractJSCodeBlocks = extractJSCodeBlocks;
     (module.exports as any).validateJS = validateJS;
     (module.exports as any).parseLLMAnswer = parseLLMAnswer;
