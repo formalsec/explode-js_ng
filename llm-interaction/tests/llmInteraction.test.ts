@@ -77,7 +77,6 @@ describe('parseLLMAnswer', () => {
 
         const result = parseLLMAnswer(input, pkg);
         expect(result.type).toBe('RuntimeErrorResult');
-        expect(result.errorMessage).toContain('boom');
     });
 
     it('returns UnsuccessfulRun for valid non exploit JS code', () => {

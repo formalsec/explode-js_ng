@@ -101,7 +101,7 @@ function runJS(pkg: Package, code: string): Result {
             return runPrototypePollutionExploit(code);
         
         case 'CWE-22': //Path Traversal
-            return runPathTraversalExploit(code);
+            return runPathTraversalExploit(code, pkg);
 
         default:
             return buildNoCodeResult(); // or maybe other speficic Result
@@ -219,7 +219,7 @@ export async function runLLMRefinementBatch({
     //For each Package
     for (const pkg of packages) {
         //For each LLM
-        const setUpProcesses: number[]= pkg.runSetup();//Run necessary setup
+        //const setUpProcesses: number[]= pkg.runSetup();//Run necessary setup
         for (const llm of llms) {
             //For each Mode
             for (const mode of modes) {
@@ -253,7 +253,7 @@ export async function runLLMRefinementBatch({
                 }
             }
         }
-        killProcessGroups(setUpProcesses); // kill background processes
+        //killProcessGroups(setUpProcesses); // kill background processes
     }
 }
 

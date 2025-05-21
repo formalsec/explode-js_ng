@@ -7,7 +7,7 @@
   "scripts": {
     "test": "cd tests && jest && cd ..",
     "build": "tsc && npm run copy-files",
-    "copy-files": "cp -r src/prompts dist/ && cp -r src/vulnerabilities dist/ && cp -r src/wrappers dist/ && cp src/vuln.js dist/",
+    "copy-files": "cp  src/spyFs.js dist/ && cp -r src/prompts dist/ && cp -r src/vulnerabilities dist/ && cp -r src/wrappers dist/",
     "start": "cd dist && node llmInteraction.js && cd .."
   },
   "keywords": [],
