@@ -1,6 +1,10 @@
 import { Package } from "../package";
 import { execSync, spawn } from "child_process";
 
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 export function runPackageSetup(pkg: Package, spyFsPath: string, logFilePath: string): number[] {
         const pids: number[] = [];
         const setup: string[] = pkg.getSetup();
@@ -18,13 +22,14 @@ export function runPackageSetup(pkg: Package, spyFsPath: string, logFilePath: st
                 console.log(`Starting server process: ${serverPath}`);
                 const child = spawn('node', ['--require', spyFsPath, serverPath], {
                     detached: true,
-                    stdio: 'ignore', // or 'pipe' if you want to capture output
+                    stdio: 'inherit', // or 'pipe' if you want to capture output
                     env: {
                         ...process.env,
                         SPY_FS_LOG_PATH: logFilePath,
                     },
                 });
                 child.unref();
+
                 
                 if (typeof child.pid === 'number') { //Record pid
                     pids.push(child.pid);

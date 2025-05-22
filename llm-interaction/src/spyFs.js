@@ -11,8 +11,11 @@ const spyFs = new Proxy(fs, {
     if (typeof orig === 'function') {
       return (...args) => {
         const [firstArg] = args;
-        if (['readFileSync', 'writeFileSync', 'unlinkSync'].includes(prop)) {
+        if (['readFileSync','readFile', 'writeFileSync','writeFile', 'unlinkSync'].includes(prop)) {
+          console.log("detected");
+          console.log(prop);
           logs.push(`${prop.toUpperCase().replace('SYNC', '').replace('FILE','')}: ${firstArg}`);
+          console.log(logs);
         }
         return orig.apply(target, args);
       };
