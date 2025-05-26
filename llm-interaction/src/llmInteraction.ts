@@ -23,8 +23,14 @@ import {
 
 //Utils
 import { replaceAllRequires } from "./util/replaceRequirePaths"
-import { killProcessGroups } from "./util/killProcessGroups"
+//import { killProcessGroups } from "./util/killProcessGroups"
 import { loadPackagesFromVulnerabilities } from "./util/loadPackages"
+import {
+	loadCheckpoint,
+	saveCheckpoint,
+	clearCheckpoint,
+	Checkpoint,
+} from "./util/checkpoint";
 
 //const MAX = 0;
 //LLMs 
@@ -217,12 +223,34 @@ export async function runLLMRefinementBatch({
 	timeoutMs,
 }: RefinementOptions): Promise<void> {
 	//For each Package
+	const cp = await loadCheckpoint();
+
+	let resuming = Boolean(cp);
+
 	for (const pkg of packages) {
 		//For each LLM
 		//const setUpProcesses: number[]= pkg.runSetup();//Run necessary setup
 		for (const llm of llms) {
 			//For each Mode
 			for (const mode of modes) {
+				if (resuming) {
+					if (
+						cp!.pkgPath === pkg.getVulnerableCodePath() &&
+						cp!.llmName === llm.getName() &&
+						cp!.mode === mode
+					) {
+						resuming = false;             // found it – resume from *here*
+					} else {
+						continue;                     // still skipping
+					}
+				}
+
+				await saveCheckpoint({
+					pkgPath: pkg.getVulnerableCodePath(),
+					llmName: llm.getName(),
+					mode,
+				});
+
 				//Run RefinmentLoop and save results to json
 				const codePath = pkg.getVulnerableCodePath();
 				const ghsaDir = codePath.split("/").find(part => part.startsWith("GHSA")) || "GHSA-UNKNOWN";
@@ -231,7 +259,6 @@ export async function runLLMRefinementBatch({
 				console.log(`🤖 LLM Name    : ${llm.getName()}`);
 				console.log(`🛠️  Mode       : ${mode}`);
 				try {
-
 
 					const result = await LLMRefinementLoop(llm, pkg, mode, maxIterations, timeoutMs);
 
@@ -255,6 +282,7 @@ export async function runLLMRefinementBatch({
 		}
 		//killProcessGroups(setUpProcesses); // kill background processes
 	}
+	await clearCheckpoint();
 }
 
 
