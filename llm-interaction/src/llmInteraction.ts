@@ -1,4 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
+import { OpenAI } from 'openai';
+
 import * as esprima from 'esprima';
 
 import { writeFile, mkdir } from 'fs/promises';
@@ -63,6 +65,64 @@ class Gemini20Flash implements LLM {
 		return this.name;
 	}
 }
+
+class GPT4o implements LLM {
+	private client: OpenAI;
+	private name: string;
+
+	constructor(apiKey: string) {
+		this.client = new OpenAI({ apiKey });
+		this.name = "GPT-4o";
+	}
+
+	async ask(prompt: string): Promise<string> {
+		try {
+			const response = await this.client.chat.completions.create({
+				model: "gpt-4o",
+				messages: [{ role: "user", content: prompt }],
+			});
+			return response.choices[0]?.message?.content ?? "";
+		} catch (err: any) {
+			console.error("GPT-4o error:", err.message);
+			return "ERROR: API Error";
+		}
+	}
+
+	getName(): string {
+		return this.name;
+	}
+}
+
+class DeepSeekR1 implements LLM {
+	private client: OpenAI;
+	private name: string;
+
+	constructor(apiKey: string) {
+		this.client = new OpenAI({
+			apiKey: apiKey,
+			baseURL: "https://api.deepseek.com",
+		});
+		this.name = "DeepSeekR1";
+	}
+
+	async ask(prompt: string): Promise<string> {
+		try {
+			const response = await this.client.chat.completions.create({
+				model: "deepseek-reasoner",
+				messages: [{ role: "user", content: prompt }],
+			});
+			return response.choices[0]?.message?.content ?? "";
+		} catch (err: any) {
+			console.error("DeepSeekR1 error:", err.message);
+			return "ERROR: API Error";
+		}
+	}
+
+	getName(): string {
+		return this.name;
+	}
+}
+
 
 //Refinement Options
 interface RefinementOptions {
