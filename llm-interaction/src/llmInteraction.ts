@@ -44,23 +44,45 @@ interface LLM {
 class Gemini20Flash implements LLM {
 	private client: GoogleGenAI;
 	private name: string;
+
+	// ---  back-off parameters -----------------------------------
+	private readonly baseDelayMs = 1_000;   // first wait = 1 s
+	private readonly maxDelayMs = 1_200_000;  // never wait more than 30min
+	private readonly maxRetries = 200;       // total calls = 1 + maxRetries
+	//--------------------------------------------------------------
 	constructor(apiKey: string) {
 		this.client = new GoogleGenAI({ apiKey: apiKey });
 		this.name = "Gemini20Flash"
 	}
 
 	async ask(prompt: string): Promise<string> {
-		try {
-			const response = await this.client.models.generateContent({
-				model: "gemini-2.0-flash",
-				contents: prompt
-			});
-			return response.text ?? "";
-		} catch (err: any) {
-			console.error("Gemini error:", err.message);
-			return "ERROR: API Error";
+		let delay = this.baseDelayMs;
+
+		for (let attempt = 0; attempt <= this.maxRetries; attempt++) {
+			try {
+				const response = await this.client.models.generateContent({
+					model: "gemini-2.0-flash",
+					contents: prompt
+				});
+
+				return response.text ?? "";
+			} catch (err: any) {
+				const final = attempt === this.maxRetries;
+				console.error(
+					`Gemini error (attempt ${attempt + 1}/${this.maxRetries + 1}):`,
+					err.message
+				);
+
+				if (final) break;               // out of retries → fall through
+				await sleep(delay);        // wait before next attempt
+				delay = Math.min(delay * 2,     // exponential back-off
+					this.maxDelayMs);
+			}
 		}
+
+		return "ERROR: API Error (retries exhausted)";
 	}
+
 	getName(): string {
 		return this.name;
 	}
