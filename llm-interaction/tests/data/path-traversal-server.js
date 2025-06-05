@@ -3,7 +3,7 @@ const fs = require('fs');
 const url = require('url');
 const path = require('path');
 
-const PORT = 3071;
+const PORT = 3070;
 
 const server = http.createServer((req, res) => {
 	const queryObject = url.parse(req.url, true).query;

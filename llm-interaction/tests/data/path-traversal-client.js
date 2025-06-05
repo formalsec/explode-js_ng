@@ -6,7 +6,7 @@ const filePath = path.resolve('/home/gc/Desktop/MEIC/ano-2/tese/explode-js_ng/ll
 
 const options = {
 	hostname: 'localhost',
-	port: 3071,
+	port: 3070,
 	path: `/?path=${encodeURIComponent(filePath)}`,
 	method: 'GET'
 };
