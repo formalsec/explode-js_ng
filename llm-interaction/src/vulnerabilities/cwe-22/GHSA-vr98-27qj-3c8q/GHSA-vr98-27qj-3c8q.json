@@ -10,7 +10,7 @@
     "cwe" : "CWE-22"
   },
   "setup":[
-      "node /home/gc/Desktop/MEIC/ano-2/tese/explode-js_ng/llm-interaction/src/vulnerabilities/cwe-22/GHSA-vr98-27qj-3c8q/setup/server.js&"
+      "/home/gc/Desktop/MEIC/ano-2/tese/explode-js_ng/llm-interaction/src/vulnerabilities/cwe-22/GHSA-vr98-27qj-3c8q/setup/server.js&"
   ],
   "correct_cwe": "CWE-22",
   "correct_package_link": "https://registry.npmjs.org/rollup-plugin-dev-server/-/rollup-plugin-dev-server-0.4.3.tgz",

@@ -374,7 +374,7 @@ async function main() {
 	//const ciPkg = new Package('module.exports = function(){',"exec(command, { stdio: 'ignore' })",'/home/gc/Desktop/MEIC/ano-2/tese/explode-js_ng/llm-interaction/src/vulnerabilities/cwe-78/index.js','CWE-78');
 
 	const packages: Package[] = loadPackagesFromVulnerabilities("./vulnerabilities");
-	const maxIterationsList: number[] = [1]/*[1, 5, 10, 20]*/;
+	const maxIterationsList: number[] = [/*1,*/ 5, 10, 20];
 	const modes: string[] = ["simple", "source-sink"];
 	const llms: LLM[] = [gemini];
 

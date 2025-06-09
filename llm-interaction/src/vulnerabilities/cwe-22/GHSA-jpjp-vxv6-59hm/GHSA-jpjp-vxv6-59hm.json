@@ -2,7 +2,7 @@
   "id": "GHSA-jpjp-vxv6-59hm",
   "name" : "open-device",
   "setup": [
-      "node /home/gc/Desktop/MEIC/ano-2/tese/explode-js_ng/llm-interaction/src/vulnerabilities/cwe-22/GHSA-jpjp-vxv6-59hm/package/broadcast.js&"
+      "/home/gc/Desktop/MEIC/ano-2/tese/explode-js_ng/llm-interaction/src/vulnerabilities/cwe-22/GHSA-jpjp-vxv6-59hm/package/broadcast.js&"
   ],
   "version" : "4.0.1",
   "dependencies": {

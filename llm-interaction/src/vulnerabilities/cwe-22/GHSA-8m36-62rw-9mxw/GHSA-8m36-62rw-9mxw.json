@@ -4,7 +4,7 @@
         "cwe": "CWE-22"
     },
     "setup":[
-        "node /home/gc/Desktop/MEIC/ano-2/tese/explode-js_ng/llm-interaction/src/vulnerabilities/cwe-22/GHSA-8m36-62rw-9mxw/vulnerable_slice.js&"
+        "/home/gc/Desktop/MEIC/ano-2/tese/explode-js_ng/llm-interaction/src/vulnerabilities/cwe-22/GHSA-8m36-62rw-9mxw/vulnerable_slice.js&"
     ],
     "correct_cwe": "CWE-22",
     "correct_package_link": "https://registry.npmjs.org/mapshaper/-/mapshaper-0.6.43.tgz",

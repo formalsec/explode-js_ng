@@ -10,7 +10,7 @@
     "cwe" : "CWE-22"
   },
   "setup":[
-      "node /home/gc/Desktop/MEIC/ano-2/tese/explode-js_ng/llm-interaction/src/vulnerabilities/cwe-22/GHSA-52r9-g5g6-2hjp/setup/server.js&"
+      "/home/gc/Desktop/MEIC/ano-2/tese/explode-js_ng/llm-interaction/src/vulnerabilities/cwe-22/GHSA-52r9-g5g6-2hjp/setup/server.js&"
   ],
   "correct_cwe": "CWE-22",
   "correct_package_link": "https://registry.npmjs.org/node-srv/-/node-srv-2.0.0.tgz",

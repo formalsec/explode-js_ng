@@ -10,7 +10,7 @@
     "cwe" : "CWE-22"
   },
   "setup":[
-      "node /home/gc/Desktop/MEIC/ano-2/tese/explode-js_ng/llm-interaction/src/vulnerabilities/cwe-22/GHSA-xj6q-9hx8-mm7f/package/node.js&"
+      "/home/gc/Desktop/MEIC/ano-2/tese/explode-js_ng/llm-interaction/src/vulnerabilities/cwe-22/GHSA-xj6q-9hx8-mm7f/package/node.js&"
     ],
   "correct_cwe": "CWE-22",
   "correct_package_link": "https://registry.npmjs.org/liuyaserver/-/liuyaserver-1.0.0.tgz",
